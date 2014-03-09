@@ -12,4 +12,5 @@ package test;
  */
 public class NewClass {
  //myclass
+    //חדש
 }
