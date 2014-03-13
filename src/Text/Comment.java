@@ -7,6 +7,7 @@
 package Text;
 
 import java.util.List;
+import person.*;
 /**
  *
  * @author חיים
@@ -18,7 +19,7 @@ public class Comment extends Text implements Comparable<Comment>{
     private List<Comment> replies;
    
     
-    public Comment(User author, String text, Text commented, int lineNumber) {
+    public Comment(User author, String text, Text commented, int lineNumber) throws InstantiationException{
         super(author, text);
         commentedText = commented;
         commentedLineNumber = lineNumber;

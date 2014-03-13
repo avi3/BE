@@ -8,6 +8,7 @@ package Text;
 
 import java.util.Collections;
 import java.util.List;
+import person.*;
 /**
  *
  * @author חיים
@@ -18,7 +19,7 @@ public class Code extends Text{
     private  final Permissions permission;
 
     
-    public Code(User author, String text, ProgramLang lang, Permissions perm) {
+    public Code(User author, String text, ProgramLang lang, Permissions perm)  throws InstantiationException{
         super(author, text);
         this.lang = lang;
         permission = perm;

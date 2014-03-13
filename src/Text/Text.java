@@ -9,6 +9,8 @@ package Text;
 import java.util.Collections;
 import java.util.List;
 import java.util.Date;
+import person.*;
+
 /**
  *
  * @author חיים
@@ -17,7 +19,7 @@ import java.util.Date;
 public class Text {
   private List<Line> lines;
   private int author_id;
-  private Date creationDate;
+  private final Date creationDate;
   
   private void parse_lines(String text) {
       int beginIndex = 0, endIndex = 0;
@@ -34,13 +36,15 @@ public class Text {
   }
   
   public void setLineNumbers(int initialLine, int initNumber) {
+      if (lines.size() < initialLine)
+          throw new IllegalArgumentException("line number out of range");
       for (Line l : getLines().subList(initialLine, getLines().size()))
           l.setLineNumber(initNumber++);
   }
   
   public Text(User author, String text) throws InstantiationException{
       this.creationDate = new Date();
-      this.author_id = author.author_id;
+      this.author_id = author.getId();
       try {
           parse_lines(text);
       }
@@ -61,18 +65,24 @@ public class Text {
   }
   
   public void addLine(Line newLine) {
+      if (newLine.getLineNumber() < 0)
+          throw new IllegalArgumentException("negative line number");
+      if (newLine.getLineNumber() > lines.size() + 1)
+          throw new IllegalArgumentException("line number not in sequence");
       for (Line l : getLines()) {
           if (l.getLineNumber() == newLine.getLineNumber())
-              throw new IllegalArgumentException();
+              throw new IllegalArgumentException("line number " + newLine.getLineNumber() + " exists");
       }
       if (!lines.add(newLine))
           throw new ArrayStoreException();
   }
   
   /* remove range of lines. including start & end */
-  public void removeLine(int start, int end) {
+  public void removeLines(int start, int end) {
+      if (start < 0 || end > lines.size())
+          throw new IllegalArgumentException("remove lines: range error");
         setLineNumbers(end + 1, start);
-        getLines().subList(start, end).clear();  
+        getLines().subList(start, end).clear();
   }
 
     /**
