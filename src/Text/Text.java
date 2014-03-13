@@ -15,9 +15,9 @@ import java.util.Date;
  */
         
 public class Text {
-  protected List<Line> lines;
-  protected int author_id;
-  protected Date creationDate;
+  private List<Line> lines;
+  private int author_id;
+  private Date creationDate;
   
   private void parse_lines(String text) {
       int beginIndex = 0, endIndex = 0;
@@ -34,7 +34,7 @@ public class Text {
   }
   
   public void setLineNumbers(int initialLine, int initNumber) {
-      for (Line l : lines.subList(initialLine, lines.size()))
+      for (Line l : getLines().subList(initialLine, getLines().size()))
           l.setLineNumber(initNumber++);
   }
   
@@ -52,16 +52,16 @@ public class Text {
   @Override
   public String toString()
   {
-      Collections.sort(lines);
+      Collections.sort(getLines());
       StringBuilder sb = new StringBuilder();
-      for (Line l : lines) {
+      for (Line l : getLines()) {
           sb.append(l.getText());
       }
       return sb.toString();
   }
   
   public void addLine(Line newLine) {
-      for (Line l : lines) {
+      for (Line l : getLines()) {
           if (l.getLineNumber() == newLine.getLineNumber())
               throw new IllegalArgumentException();
       }
@@ -72,7 +72,44 @@ public class Text {
   /* remove range of lines. including start & end */
   public void removeLine(int start, int end) {
         setLineNumbers(end + 1, start);
-        lines.subList(start, end).clear();  
+        getLines().subList(start, end).clear();  
   }
+
+    /**
+     * @return the lines
+     */
+    public List<Line> getLines() {
+        return lines;
+    }
+
+    /**
+     * @param lines the lines to set
+     */
+    public void setLines(List<Line> lines) {
+        this.lines = lines;
+    }
+
+    /**
+     * @return the author_id
+     */
+    public int getAuthor_id() {
+        return author_id;
+    }
+
+    /**
+     * @param author_id the author_id to set
+     */
+    public void setAuthor_id(int author_id) {
+        this.author_id = author_id;
+    }
+
+    /**
+     * @return the creationDate
+     */
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+ 
 }
  

@@ -15,7 +15,14 @@ import java.util.List;
 public class Code extends Text{
     private ProgramLang lang;
     private List<Comment> comments;
+    private  final Permissions permission;
 
+    
+    public Code(User author, String text, ProgramLang lang, Permissions perm) {
+        super(author, text);
+        this.lang = lang;
+        permission = perm;
+    }
     /**
      * @return the lang
      */

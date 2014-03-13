@@ -6,36 +6,42 @@
 
 package Text;
 
+import java.util.List;
 /**
  *
  * @author חיים
  */
 public class Comment extends Text implements Comparable<Comment>{
-    private Code commentedCode;
+    private Text commentedText;
     private int commentedLineNumber;
-    private Boolean viewed;
+    private boolean viewed;
+    private List<Comment> replies;
    
+    
+    public Comment(User author, String text, Text commented, int lineNumber) {
+        super(author, text);
+        commentedText = commented;
+        commentedLineNumber = lineNumber;
+    }
+    
     //to sort comments by date
     public int compareTo(Comment otherComment)
     {
-        if (this.creationDate.before(otherComment.creationDate))
-            return 1;
-        else
-            return 0;
+        return this.getCreationDate().compareTo(otherComment.getCreationDate());
     }
 
     /**
-     * @return the commentedCode
+     * @return the commentedText
      */
-    public Code getCommentedCode() {
-        return commentedCode;
+    public Text getCommentedCode() {
+        return commentedText;
     }
 
     /**
-     * @param commentedCode the commentedCode to set
+     * @param commentedText the commentedCode to set
      */
-    public void setCommentedCode(Code commentedCode) {
-        this.commentedCode = commentedCode;
+    public void setCommentedText(Text commentedText) {
+        this.commentedText = commentedText;
     }
 
     /**
@@ -64,5 +70,19 @@ public class Comment extends Text implements Comparable<Comment>{
      */
     public void setViewed(Boolean viewed) {
         this.viewed = viewed;
+    }
+
+    /**
+     * @return the replies
+     */
+    public List<Comment> getReplies() {
+        return replies;
+    }
+
+    /**
+     * @param replies the replies to set
+     */
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
     }
 }
