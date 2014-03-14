@@ -17,11 +17,13 @@ public class Code extends Text{
     private ProgramLang lang;
     private List<Comment> comments;
     private  final Permissions permission;
+    private String subject;
 
     
-    public Code(User author, String text, ProgramLang lang, Permissions perm)  throws InstantiationException{
+    public Code(User author, String text, ProgramLang lang, Permissions perm, String subject)  throws InstantiationException{
         super(author, text);
         this.lang = lang;
+        this.subject = subject;
         permission = perm;
     }
     /**
@@ -53,7 +55,23 @@ public class Code extends Text{
     }
     
     public void addComment(Comment newComment) {
+        if (newComment.getCommentedLineNumber() >= lines.size())
+            throw new IllegalArgumentException("commented line out of range");
         comments.add(newComment);
         Collections.sort(comments);
+    }
+
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

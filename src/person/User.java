@@ -6,7 +6,7 @@
 
 package person;
 
-import java.util.ArrayList;
+import java.util.List;
 import Text.*;
 
 /**
@@ -16,15 +16,18 @@ import Text.*;
  */
 public class User implements Friend, NotFriend {
     private static int nextId = 0;
-    private int id;
-    private String useranme;
+
+    
+    private final int  id;
+    private String username;
     private String password;
     private String email_address;
-    private ArrayList<Integer> friends;
+    private List<Friend> friends;
     
     
-    private ArrayList<> invitations;
-    private ArrayList<Code> mycodes;//להחליף את סטרינג למחלקה קוד או מזהה מספרי של קוד
+    private List<Invitation> pendingInvitations;
+    private List<Invitation> outGoingInvitations;
+    private List<Code> codes;
     
    public static int assignId() {
         return nextId++;
@@ -53,54 +56,79 @@ public class User implements Friend, NotFriend {
     public User(String username, String password, String email_address) {
         validatePassword(password);
         this.password = password;
-        this.useranme = username;
+        this.username = username;
         this.email_address = email_address;
         this.id = assignId();
     }
     
     /**
      * function to add friend
-     * @param friendId 
+     * @param newFriend 
      */
-    public void addFriend(int friendId){
-        if (friendId >= nextId)
-            throw new IllegalArgumentException("friend id out of range");
-        for (Integer id : friends) {
-            if (id.intValue() == friendId)
-                throw new IllegalArgumentException("already in frieds list");
+    public void addFriend(Friend newFriend) {
+        for (Friend f : getFriends()) {
+            if (f.getId() == newFriend.getId())
+                throw new IllegalArgumentException("already in friends list");
         }
-        if (!friends.add(friendId))
+        if (!friends.add(newFriend))
             throw new ArrayStoreException();
     }
     
-    public void removeFriend(int friendId) {
-        for (Integer id : friends)
-            if (id == friendId)
-                friends.remove(id);
+    public void removeFriend(Friend friend) {
+        for (Friend f : getFriends())
+            if (f.getId() == friend.getId())
+                getFriends().remove(getId());
+        throw new IllegalArgumentException("not in frieds list");
     }
     
-    /**
-     * get my friends
-     * @return 
-     */
-    public ArrayList<Integer> getIdFRiend(){
-        return idFriends ; 
-    }
+    
     
     /**
      * function to add code
      * @param code 
      */
-    public void addcode(String code){//להחליף את סטרינג למחלקה קוד או מזהה מספרי של קוד
-        mycods.add(code);
+    public void addCode(Code code){
+        if (code.getAuthor_id() != this.getId())
+            throw new IllegalArgumentException("this code doesn't belong to this user");
+        if (!codes.add(code))
+            throw new ArrayStoreException();
+    }
+    public void removeCode(Code code) {
+        for (Code tmp : codes) {
+            if (tmp == code)
+                codes.remove(code);
+        }
+        throw new IllegalArgumentException("this code doesn't belong to this user");
+    }
+    
+    public void addPendingInvitation(Invitation newInvitation) {
+        if (newInvitation.getNewFriend().getId() != this.getId())
+            throw new IllegalArgumentException("invited mismatch");
+        for (Invitation tmp : pendingInvitations) {
+            if (tmp.getInviter().getId() == newInvitation.getInviter().getId())
+                throw new IllegalArgumentException("invitation from this user already exists");
+        }
+        if (!pendingInvitations.add(newInvitation))
+            throw new ArrayStoreException();
+    }
+   
+    public void addOutGoingInvitation(Invitation newInvitation) {
+        if (newInvitation.getInviter().getId() != this.getId())
+            throw new IllegalArgumentException("invited mismatch");
+        for (Invitation tmp : outGoingInvitations) {
+            if (tmp.getNewFriend().getId() == newInvitation.getNewFriend().getId())
+                throw new IllegalArgumentException("already invited this user");
+        }
+        if (!outGoingInvitations.add(newInvitation))
+            throw new ArrayStoreException();
     }
     
     /**
      * get my cods
      * @return 
      */
-    public ArrayList<String> getMyCods(){
-        return mycods; //להחליף את סטרינג למחלקה קוד או מזהה מספרי של קוד
+    public List<Code> getMyCodes(){
+        return codes;
     }
     
     @Override
@@ -133,25 +161,20 @@ public class User implements Friend, NotFriend {
         return id;
     }
 
+    
+
     /**
-     * @param id the id to set
+     * @return the username
      */
-    public void setId(int id) {
-        this.id = id;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * @return the useranme
+     * @param username the useranme to set
      */
-    public String getUseranme() {
-        return useranme;
-    }
-
-    /**
-     * @param useranme the useranme to set
-     */
-    public void setUseranme(String useranme) {
-        this.useranme = useranme;
+    public void setUseranme(String username) {
+        this.username = username;
     }
 
     /**
@@ -185,42 +208,31 @@ public class User implements Friend, NotFriend {
     /**
      * @return the Friends
      */
-    public ArrayList<Friend> getFriends() {
-        return Friends;
+    public List<Friend> getFriends() {
+        return friends;
     }
 
+    
+
+    
+
+    
     /**
-     * @param Friends the Friends to set
+     * @return the pendingInvitations
      */
-    public void setFriends(ArrayList<Friend> Friends) {
-        this.Friends = Friends;
+    public List<Invitation> getPendingInvitations() {
+        return pendingInvitations;
     }
 
-    /**
-     * @return the invitations
-     */
-    public ArrayList<> getInvitations() {
-        return invitations;
-    }
+    
 
     /**
-     * @param invitations the invitations to set
+     * @return the outGoingInvitations
      */
-    public void setInvitations(ArrayList<> invitations) {
-        this.invitations = invitations;
+    public List<Invitation> getOutGoingInvitations() {
+        return outGoingInvitations;
     }
 
-    /**
-     * @return the mycodes
-     */
-    public ArrayList<Code> getMycodes() {
-        return mycodes;
-    }
+    
 
-    /**
-     * @param mycodes the mycodes to set
-     */
-    public void setMycodes(ArrayList<Code> mycodes) {
-        this.mycodes = mycodes;
-    }
 }

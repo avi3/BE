@@ -5,16 +5,17 @@
  */
 
 package person;
+import java.util.List;
+import Text.Code;
 
 /**
  *Represents a user who is not a friend
  * @author g 
  */
 public interface NotFriend {
-    /**
-     * Does person want to be my friend
-     * @param idFriend
-     * @return  
-     */
-    public abstract boolean becomeFriend(int idFriend);
+    
+    public abstract void invite(User inviter);
+    public abstract List<Code> getCodes();
+    public int getId();
+    public String getUsername();
 }

@@ -17,7 +17,7 @@ import person.*;
  */
         
 public class Text {
-  private List<Line> lines;
+  protected List<Line> lines;
   private int author_id;
   private final Date creationDate;
   
