@@ -7,7 +7,9 @@
 package person;
 
 import java.util.List;
+
 import Text.*;
+import java.util.ArrayList;
 
 /**
  * Class that represents a user
@@ -28,6 +30,32 @@ public class User implements Friend, NotFriend {
     private List<Invitation> pendingInvitations;
     private List<Invitation> outGoingInvitations;
     private List<Code> codes;
+    
+    @Override
+    public void addComment(User commentator, Code code, int lineNumber, String commentText) throws InstantiationException 
+     {
+        boolean hisCode = false;
+        
+        for (Code c : codes) {
+            if (c == code)
+                hisCode = true;
+        }
+        if (!hisCode)
+            throw new IllegalArgumentException("Code not of this friend");
+        
+        code.addComment(new Comment(commentator, commentText, code, lineNumber ));
+    }
+     
+    
+    @Override
+    public void invite(User inviter) {
+        for (Invitation invit : pendingInvitations) {
+            if (invit.getInviter() == (NotFriend)this)
+                throw new IllegalArgumentException("friend was already invited");
+        }
+        if (!pendingInvitations.add(new Invitation(inviter, this)))
+            throw new ArrayStoreException();
+    }
     
    public static int assignId() {
         return nextId++;
@@ -131,29 +159,9 @@ public class User implements Friend, NotFriend {
         return codes;
     }
     
-    @Override
-    public void putComments(String myCommant) {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /**
-     *
-     * @param idFriend
-     * @return
-     */
-    @Override
-    public boolean becomeFriend(int idFriend) {
-        return wantsFriend.indexOf(idFriend)!=-1;
-    }
     
-    /**
-     *  friend request
-     * @param id 
-     */
-    public void addWantsFriend(int id){
-        wantsFriend.add(id);
-    }
-
+    
+   
     /**
      * @return the id
      */
@@ -166,6 +174,7 @@ public class User implements Friend, NotFriend {
     /**
      * @return the username
      */
+    @Override
     public String getUsername() {
         return username;
     }
@@ -232,6 +241,34 @@ public class User implements Friend, NotFriend {
     public List<Invitation> getOutGoingInvitations() {
         return outGoingInvitations;
     }
+
+    @Override
+    public List<Code> getFriendCodes() {
+        List<Code> toFriend = new ArrayList<Code>();
+    
+        for (Code c : codes) {
+            if (c.getPermission() == Permissions.ALL ||
+                    c.getPermission() == Permissions.FRIENDS ||
+                    c.getPermission() == Permissions.REQUEST)
+                toFriend.add(c);
+        }
+        return toFriend;
+    }
+
+    @Override
+    public List<Code> getNotFriendCodes() {
+        List<Code> toFriend = new ArrayList<Code>();
+    
+        for (Code c : codes) {
+            if (c.getPermission() == Permissions.ALL)
+                toFriend.add(c);
+        }
+        return toFriend;
+    }
+
+    
+
+    
 
     
 

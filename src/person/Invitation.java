@@ -23,6 +23,7 @@ public class Invitation {
         this.newFriend = newFriend;
         this.invitationDate = new Date();
     }
+    
     public void approve(Friend validator) {
         if (validator.getId() == getNewFriend().getId()) {
             setApproved(true);

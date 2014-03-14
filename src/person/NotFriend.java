@@ -5,8 +5,10 @@
  */
 
 package person;
-import java.util.List;
+
 import Text.Code;
+import java.util.List;
+
 
 /**
  *Represents a user who is not a friend
@@ -14,8 +16,9 @@ import Text.Code;
  */
 public interface NotFriend {
     
+    /* invite this not friend to be a friend of the specified User */
     public abstract void invite(User inviter);
-    public abstract List<Code> getCodes();
+    public abstract List<Code> getNotFriendCodes();
     public int getId();
     public String getUsername();
 }

@@ -16,7 +16,7 @@ import person.*;
 public class Code extends Text{
     private ProgramLang lang;
     private List<Comment> comments;
-    private  final Permissions permission;
+    private Permissions permission;
     private String subject;
 
     
@@ -73,5 +73,19 @@ public class Code extends Text{
      */
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    /**
+     * @return the permission
+     */
+    public Permissions getPermission() {
+        return permission;
+    }
+
+    /**
+     * @param permission the permission to set
+     */
+    public void setPermission(Permissions permission) {
+        this.permission = permission;
     }
 }

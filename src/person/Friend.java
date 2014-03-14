@@ -13,12 +13,9 @@ import Text.Code;
  * @author g
  */
 public interface Friend {
-/**
- * Make a comment of friend
-      * @param myCommant
- */
-    public abstract List<Code> getCodes();
-    void addComment(Code code, int lineNumber, String commentText);
-    public int getId();
-    public String getUsername();
+
+    public abstract List<Code> getFriendCodes(); 
+    public abstract void addComment(User commentator, Code code, int lineNumber, String commentText) throws InstantiationException ;
+    public abstract int getId();
+    public abstract String getUsername();
 }
