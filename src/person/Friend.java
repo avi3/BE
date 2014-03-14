@@ -18,7 +18,7 @@ public interface Friend {
       * @param myCommant
  */
     public abstract List<Code> getCodes();
-    void Comments(Code code, int lineNumber, String commentText);
+    void addComment(Code code, int lineNumber, String commentText);
     public int getId();
     public String getUsername();
 }
