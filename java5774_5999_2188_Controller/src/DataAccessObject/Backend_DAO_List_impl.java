@@ -81,7 +81,38 @@ public class Backend_DAO_List_impl {
         return (ArrayList<Invitation>) _Invitations;
     }
     
+     /**
+     * Function to remove code by author
+     * @param id
+     * @throws Exception 
+     */
+    public void RemoveCode(int id) throws Exception {
+        for (Code code : _Codes) 
+            if (code.getAuthor_id()== id) 
+                 _Codes.remove(code);
+    }
     
+     /**
+     * Function to remove user by id
+     * @param id
+     * @throws Exception 
+     */
+    public void RemoveUser(int id) throws Exception {
+        for (User user : _Users) 
+            if (user.getId()== id) 
+                 _Users.remove(user);
+    }
+    
+     /**
+     * Function to remove invitation by id of invater
+     * @param id
+     * @throws Exception 
+     */
+    public void RemoveInvitation(int id) throws Exception {
+        for (Invitation invitation : _Invitations) 
+            if (invitation.getInviter().getId()== id) 
+                 _Invitations.remove(invitation);
+    }
     
     
 }
