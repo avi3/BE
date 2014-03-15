@@ -25,6 +25,7 @@ public class User implements Friend, NotFriend {
     private String password;
     private String email_address;
     private List<Friend> friends;
+    private boolean isOnline;
     
     
     private List<Invitation> pendingInvitations;
@@ -53,8 +54,8 @@ public class User implements Friend, NotFriend {
             if (invit.getInviter() == (NotFriend)this)
                 throw new IllegalArgumentException("friend was already invited");
         }
-        if (!pendingInvitations.add(new Invitation(inviter, this)))
-            throw new ArrayStoreException();
+        addPendingInvitation(new Invitation(inviter, this));
+        
     }
     
    public static int assignId() {
@@ -105,8 +106,8 @@ public class User implements Friend, NotFriend {
     public void removeFriend(Friend friend) {
         for (Friend f : getFriends())
             if (f.getId() == friend.getId())
-                getFriends().remove(getId());
-        throw new IllegalArgumentException("not in frieds list");
+                getFriends().remove(f);
+        throw new IllegalArgumentException("not in friends list");
     }
     
     
@@ -124,9 +125,18 @@ public class User implements Friend, NotFriend {
     public void removeCode(Code code) {
         for (Code tmp : codes) {
             if (tmp == code)
-                codes.remove(code);
+                codes.remove(tmp);
         }
         throw new IllegalArgumentException("this code doesn't belong to this user");
+    }
+    
+    public void updateoutGoingInvitations() throws Exception {
+        for (Invitation invitation : outGoingInvitations) {
+            if (invitation.isApproved()) {
+                addFriend(invitation.getApprovedFriend(this));
+                removeOutgoingInvitation(invitation);
+            }
+        }
     }
     
     public void addPendingInvitation(Invitation newInvitation) {
@@ -140,15 +150,31 @@ public class User implements Friend, NotFriend {
             throw new ArrayStoreException();
     }
    
+    public void removePendingInvitation(Invitation pending) {
+        for (Invitation tmp : pendingInvitations) {
+            if (tmp == pending)
+                pendingInvitations.remove(tmp);
+        }
+        throw new IllegalArgumentException("pending invitation not found");
+    }
+    
     public void addOutGoingInvitation(Invitation newInvitation) {
         if (newInvitation.getInviter().getId() != this.getId())
-            throw new IllegalArgumentException("invited mismatch");
+            throw new IllegalArgumentException("inviter mismatch");
         for (Invitation tmp : outGoingInvitations) {
             if (tmp.getNewFriend().getId() == newInvitation.getNewFriend().getId())
-                throw new IllegalArgumentException("already invited this user");
+                throw new IllegalArgumentException("you already invited this user");
         }
         if (!outGoingInvitations.add(newInvitation))
             throw new ArrayStoreException();
+    }
+    
+    public void removeOutgoingInvitation(Invitation pending) {
+        for (Invitation tmp : outGoingInvitations) {
+            if (tmp == pending)
+                outGoingInvitations.remove(tmp);
+        }
+        throw new IllegalArgumentException("outgoing invitation not found");
     }
     
     /**
@@ -244,7 +270,7 @@ public class User implements Friend, NotFriend {
 
     @Override
     public List<Code> getFriendCodes() {
-        List<Code> toFriend = new ArrayList<Code>();
+        List<Code> toFriend = new ArrayList();
     
         for (Code c : codes) {
             if (c.getPermission() == Permissions.ALL ||
@@ -257,13 +283,27 @@ public class User implements Friend, NotFriend {
 
     @Override
     public List<Code> getNotFriendCodes() {
-        List<Code> toFriend = new ArrayList<Code>();
+        List<Code> toFriend = new ArrayList();
     
         for (Code c : codes) {
             if (c.getPermission() == Permissions.ALL)
                 toFriend.add(c);
         }
         return toFriend;
+    }
+
+    /**
+     * @return the isOnline
+     */
+    public boolean isIsOnline() {
+        return isOnline;
+    }
+
+    /**
+     * @param isOnline the isOnline to set
+     */
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 
     

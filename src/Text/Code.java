@@ -60,6 +60,18 @@ public class Code extends Text{
         comments.add(newComment);
         Collections.sort(comments);
     }
+    
+    public void removeComment(Comment comment) {
+        
+        for (Comment c : comments) {
+            if (c == comment)
+                comments.remove(c);
+            return;
+        }
+        throw new IllegalArgumentException("commente not found");
+    }
+    
+   
 
     /**
      * @return the subject

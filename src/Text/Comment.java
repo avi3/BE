@@ -6,6 +6,7 @@
 
 package Text;
 
+import java.util.Collections;
 import java.util.List;
 import person.*;
 /**
@@ -26,11 +27,28 @@ public class Comment extends Text implements Comparable<Comment>{
     }
     
     //to sort comments by date
+    @Override
     public int compareTo(Comment otherComment)
     {
         return this.getCreationDate().compareTo(otherComment.getCreationDate());
     }
 
+    public void addReply(Comment reply) {
+        if (reply.getCommentedLineNumber() >= lines.size())
+            throw new IllegalArgumentException("commented line out of range");
+        replies.add(reply);
+        Collections.sort(replies);
+    }
+    
+    public void removeReply(Comment reply) {
+        for (Comment c : replies) {
+            if (c == reply)
+                replies.remove(c);
+            return;
+        }
+        throw new IllegalArgumentException("commente not found");
+    }
+    
     /**
      * @return the commentedText
      */

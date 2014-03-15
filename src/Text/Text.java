@@ -30,6 +30,7 @@ public class Text {
           Line tmp = new Line(text.substring(beginIndex, endIndex), lineNumber);
           lineNumber++;
           beginIndex = endIndex + 1;
+          text = text.substring(beginIndex, text.length());
           if  (!lines.add(tmp))
               throw new ArrayStoreException();
       }
@@ -75,6 +76,8 @@ public class Text {
       }
       if (!lines.add(newLine))
           throw new ArrayStoreException();
+      /* keep lines sorted */
+      Collections.sort(lines);
   }
   
   /* remove range of lines. including start & end */
