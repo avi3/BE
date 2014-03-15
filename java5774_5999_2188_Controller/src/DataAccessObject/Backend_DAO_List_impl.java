@@ -34,6 +34,9 @@ public class Backend_DAO_List_impl {
      * @throws Exception 
      */
     public void AddUser(User tmp) throws Exception {
+        for (User user : _Users) 
+            if (user.getId()== tmp.getId())
+                throw new Exception("The user already exists");
         _Users.add(tmp);
     }
     
@@ -87,9 +90,14 @@ public class Backend_DAO_List_impl {
      * @throws Exception 
      */
     public void RemoveCode(int id) throws Exception {
+        boolean flag=true;
         for (Code code : _Codes) 
-            if (code.getAuthor_id()== id) 
+            if (code.getAuthor_id()== id) {
                  _Codes.remove(code);
+                 flag=false;
+            }
+         if (flag) throw new Exception("To this id number is not exit code");
+
     }
     
      /**
@@ -98,9 +106,13 @@ public class Backend_DAO_List_impl {
      * @throws Exception 
      */
     public void RemoveUser(int id) throws Exception {
+        boolean flag=true;
         for (User user : _Users) 
-            if (user.getId()== id) 
+            if (user.getId()== id){ 
                  _Users.remove(user);
+                 flag=false;
+            }
+        if (flag) throw new Exception("Id number is not in the list");
     }
     
      /**
@@ -109,9 +121,13 @@ public class Backend_DAO_List_impl {
      * @throws Exception 
      */
     public void RemoveInvitation(int id) throws Exception {
+        boolean flag=true;
         for (Invitation invitation : _Invitations) 
-            if (invitation.getInviter().getId()== id) 
+            if (invitation.getInviter().getId()== id){ 
                  _Invitations.remove(invitation);
+                 flag=false;
+            }
+         if (flag) throw new Exception("To this id number is not exit invitation");
     }
     
     
