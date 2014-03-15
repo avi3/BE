@@ -10,13 +10,13 @@ import person.*;
 import Text.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import Interface.Backend;
 
 /**
  *simple implementation data
  * @author g
  */
-public class Backend_DAO_List_impl {
+public class Backend_DAO_List_impl implements Backend{
     private List<User> _Users;
     private List<Code> _Codes;
     private List<Invitation> _Invitations; 
@@ -33,6 +33,7 @@ public class Backend_DAO_List_impl {
      * @param tmp
      * @throws Exception 
      */
+    @Override   
     public void AddUser(User tmp) throws Exception {
         for (User user : _Users) 
             if (user.getId()== tmp.getId())
@@ -44,6 +45,7 @@ public class Backend_DAO_List_impl {
      * @return all users()
      * @throws Exception 
      */
+    @Override
     public ArrayList<User> GetAllUsers() throws Exception {
         return (ArrayList<User>) _Users;
     }
@@ -54,6 +56,7 @@ public class Backend_DAO_List_impl {
      * @param tmp
      * @throws Exception 
      */
+    @Override
     public void AddCode(Code tmp) throws Exception {
         _Codes.add(tmp);
     }
@@ -62,6 +65,7 @@ public class Backend_DAO_List_impl {
      * @return all codes()
      * @throws Exception 
      */
+    @Override
     public ArrayList<Code> GetAllCodes() throws Exception {
         return (ArrayList<Code>) _Codes;
     }
@@ -72,6 +76,7 @@ public class Backend_DAO_List_impl {
      * @param tmp
      * @throws Exception 
      */
+    @Override
     public void AddInvitation(Invitation tmp) throws Exception {
         _Invitations.add(tmp);
     }
@@ -80,6 +85,7 @@ public class Backend_DAO_List_impl {
      * @return all invitations()
      * @throws Exception 
      */
+    @Override
     public ArrayList<Invitation> GetAllInvitations() throws Exception {
         return (ArrayList<Invitation>) _Invitations;
     }
@@ -89,6 +95,7 @@ public class Backend_DAO_List_impl {
      * @param id
      * @throws Exception 
      */
+    @Override
     public void RemoveCode(int id) throws Exception {
         boolean flag=true;
         for (Code code : _Codes) 
@@ -105,6 +112,7 @@ public class Backend_DAO_List_impl {
      * @param id
      * @throws Exception 
      */
+    @Override
     public void RemoveUser(int id) throws Exception {
         boolean flag=true;
         for (User user : _Users) 
@@ -120,6 +128,7 @@ public class Backend_DAO_List_impl {
      * @param id
      * @throws Exception 
      */
+    @Override
     public void RemoveInvitation(int id) throws Exception {
         boolean flag=true;
         for (Invitation invitation : _Invitations) 
