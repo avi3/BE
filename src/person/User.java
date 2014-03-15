@@ -17,10 +17,10 @@ import java.util.ArrayList;
  * @author g
  */
 public class User implements Friend, NotFriend {
-    private static int nextId = 0;
+   
 
     
-    private final int  id;
+    private  int  id;
     private String username;
     private String password;
     private String email_address;
@@ -47,6 +47,18 @@ public class User implements Friend, NotFriend {
         code.addComment(new Comment(commentator, commentText, code, lineNumber ));
     }
      
+    public void update(User user) {
+        if (this.getId() != user.getId())
+            throw new IllegalArgumentException("not the same user");
+        this.codes = user.getMyCodes();
+        this.email_address = user.email_address;
+        this.username = user.username;
+        this.friends = user.getFriends();
+        this.password= user.password;
+        this.pendingInvitations = user.getPendingInvitations();
+        this.outGoingInvitations = user.getOutGoingInvitations();
+        this.isOnline = user.isOnline();
+    }
     
     @Override
     public void invite(User inviter) {
@@ -58,9 +70,7 @@ public class User implements Friend, NotFriend {
         
     }
     
-   public static int assignId() {
-        return nextId++;
-    }
+  
    
     private boolean hasChar(String s) {
         for (int i = 0; i < s.length(); i++)
@@ -87,7 +97,7 @@ public class User implements Friend, NotFriend {
         this.password = password;
         this.username = username;
         this.email_address = email_address;
-        this.id = assignId();
+        
     }
     
     /**
@@ -122,14 +132,22 @@ public class User implements Friend, NotFriend {
         if (!codes.add(code))
             throw new ArrayStoreException();
     }
+    
     public void removeCode(Code code) {
         for (Code tmp : codes) {
-            if (tmp == code)
+            if (tmp.getCodeId() == code.getCodeId())
                 codes.remove(tmp);
         }
         throw new IllegalArgumentException("this code doesn't belong to this user");
     }
     
+    public void updateCode(Code code) {
+        for (Code tmp : codes) {
+            if (tmp.getCodeId() == code.getCodeId())
+                tmp.update(code);
+        }
+        throw new IllegalArgumentException("code not found");
+    }
     public void updateoutGoingInvitations() throws Exception {
         for (Invitation invitation : outGoingInvitations) {
             if (invitation.isApproved()) {
@@ -191,6 +209,7 @@ public class User implements Friend, NotFriend {
     /**
      * @return the id
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -295,7 +314,7 @@ public class User implements Friend, NotFriend {
     /**
      * @return the isOnline
      */
-    public boolean isIsOnline() {
+    public boolean isOnline() {
         return isOnline;
     }
 
@@ -304,6 +323,13 @@ public class User implements Friend, NotFriend {
      */
     public void setIsOnline(boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     

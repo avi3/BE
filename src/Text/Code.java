@@ -14,17 +14,31 @@ import person.*;
  * @author חיים
  */
 public class Code extends Text{
+    
+    private int codeId;
     private ProgramLang lang;
     private List<Comment> comments;
     private Permissions permission;
     private String subject;
 
     
+    
     public Code(User author, String text, ProgramLang lang, Permissions perm, String subject)  throws InstantiationException{
         super(author, text);
         this.lang = lang;
         this.subject = subject;
         permission = perm;
+    }
+    
+    public void update(Code code) {
+        if (this.getCodeId() != code.getCodeId())
+            throw new IllegalArgumentException("not the same code");
+        super.update(code);
+        this.comments = code.getComments();
+        this.lang = code.getLang();
+        this.lines = code.getLines();
+        this.permission = code.getPermission();
+        this.subject = code.getSubject();
     }
     /**
      * @return the lang
@@ -99,5 +113,19 @@ public class Code extends Text{
      */
     public void setPermission(Permissions permission) {
         this.permission = permission;
+    }
+
+    /**
+     * @return the codeId
+     */
+    public int getCodeId() {
+        return codeId;
+    }
+
+    /**
+     * @param codeId the codeId to set
+     */
+    public void setCodeId(int codeId) {
+        this.codeId = codeId;
     }
 }

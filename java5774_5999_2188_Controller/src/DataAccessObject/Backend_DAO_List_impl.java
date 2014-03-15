@@ -20,7 +20,8 @@ public class Backend_DAO_List_impl implements Backend{
     private List<User> _Users;
     private List<Code> _Codes;
     private List<Invitation> _Invitations; 
-    
+    private int nextCodeId = 0;
+    private int nextUserId = 0;
     
     public Backend_DAO_List_impl(){
         _Users = new ArrayList<User>();
@@ -35,9 +36,7 @@ public class Backend_DAO_List_impl implements Backend{
      */
     @Override   
     public void AddUser(User tmp) throws Exception {
-        for (User user : _Users) 
-            if (user.getId()== tmp.getId())
-                throw new Exception("The user already exists");
+        assignUserId(tmp);
         _Users.add(tmp);
     }
     
@@ -58,7 +57,12 @@ public class Backend_DAO_List_impl implements Backend{
      */
     @Override
     public void AddCode(Code tmp) throws Exception {
+        assignCodeId(tmp);
         _Codes.add(tmp);
+        for (User toAdd : _Users) {
+            if (toAdd.getId() == tmp.getAuthor_id())
+                toAdd.addCode(tmp);
+        }
     }
     
     /**
@@ -71,15 +75,7 @@ public class Backend_DAO_List_impl implements Backend{
     }
     
    
-    /**
-     * Function to add invitation
-     * @param tmp
-     * @throws Exception 
-     */
-    @Override
-    public void AddInvitation(Invitation tmp) throws Exception {
-        _Invitations.add(tmp);
-    }
+    
     
     /**
      * @return all invitations()
@@ -92,19 +88,24 @@ public class Backend_DAO_List_impl implements Backend{
     
      /**
      * Function to remove code by author
-     * @param id
+     * @param codeId
      * @throws Exception 
      */
     @Override
-    public void RemoveCode(int id) throws Exception {
-        boolean flag=true;
+    public void RemoveCode(int codeId) throws Exception {
+        
         for (Code code : _Codes) 
-            if (code.getAuthor_id()== id) {
+            if (code.getCodeId() == codeId) {
+                for (User user : _Users) {
+                    if (user.getId() == code.getAuthor_id()) {
+                        user.removeCode(code);
+                        break;
+                }
                  _Codes.remove(code);
-                 flag=false;
+                 return;
             }
-         if (flag) throw new Exception("To this id number is not exit code");
-
+          throw new Exception("code not found");
+            }
     }
     
      /**
@@ -114,29 +115,149 @@ public class Backend_DAO_List_impl implements Backend{
      */
     @Override
     public void RemoveUser(int id) throws Exception {
-        boolean flag=true;
+       
         for (User user : _Users) 
-            if (user.getId()== id){ 
+            if (user.getId()== id){
+                /* remove user codes */
+                List<Code> codes = GetAllUserCodes(id);
+                for (Code code : codes) {
+                    RemoveCode(code);
+                }
                  _Users.remove(user);
-                 flag=false;
+                return;
             }
-        if (flag) throw new Exception("Id number is not in the list");
+        throw new Exception("Id number is not in the list");
     }
     
-     /**
-     * Function to remove invitation by id of invater
-     * @param id
-     * @throws Exception 
-     */
+    
+
     @Override
-    public void RemoveInvitation(int id) throws Exception {
-        boolean flag=true;
-        for (Invitation invitation : _Invitations) 
-            if (invitation.getInviter().getId()== id){ 
-                 _Invitations.remove(invitation);
-                 flag=false;
+    public void updateUser(User user) {
+        User tmp = GetUser(user.getId());
+        tmp.update(user);
+    }
+
+    @Override
+    public User GetUser(int id) {
+        for (User tmp : _Users) {
+            if (tmp.getId() == id)
+                return tmp;
+        }
+       throw new IllegalArgumentException("user not found"); 
+    }
+    
+    @Override
+    public ArrayList<Friend> getFriends(int userId) {
+        ArrayList<Friend> ret = new ArrayList<Friend>(); 
+        User user = GetUser(userId);
+        for (Friend friend : user.getFriends()) {
+            try {
+            ret.add(GetUser(friend.getId()));
             }
-         if (flag) throw new Exception("To this id number is not exit invitation");
+            catch (Exception e) {
+                //ignore non exsitent friends
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ArrayList<NotFriend> getAllUsers() {
+        ArrayList<NotFriend> ret = new ArrayList<NotFriend>();
+        for (User user : _Users)
+            ret.add(user);
+        return ret;
+    }
+
+    
+
+    @Override
+    public void updateCode(Code code) {
+        for (Code tmp : _Codes) {
+            if (tmp.getCodeId() == code.getCodeId()) {
+                /* update at owner */
+                for (User user : _Users) {
+                    if (user.getId() == code.getAuthor_id())
+                        user.updateCode(code);
+                }
+                tmp.update(code);
+            }
+        }
+    }
+
+    @Override
+    public List<Code> GetUserCodes(int userId, boolean isFriend) throws Exception {
+        User user = GetUser(userId);
+        
+        if (isFriend)
+            return ((Friend)user).getFriendCodes();
+        else
+            return ((NotFriend)user).getNotFriendCodes();
+    }
+
+    @Override
+    public void invite(int inviterId, int invitedId) throws Exception {
+        User inviter  = GetUser(inviterId);
+        NotFriend invited = GetUser(invitedId);
+        
+        invited.invite(inviter);
+        _Invitations.add(new Invitation(inviter, invited));
+    }
+
+    
+
+    @Override
+    public void assignCodeId(Code code) {
+        code.setCodeId(nextCodeId++);
+    }
+
+    @Override
+    public void assignUserId(User user) {
+       user.setId(nextUserId);
+    }
+
+    @Override
+    public List<Invitation> getUserOutGoing(int userId) {
+        return GetUser(userId).getOutGoingInvitations();
+    }
+
+    @Override
+    public List<Invitation> getUserPending(int userId) {
+        return GetUser(userId).getPendingInvitations();
+    }
+
+    @Override
+    public void notifyOnline(int userId) {
+        GetUser(userId).setIsOnline(true);
+    }
+
+    @Override
+    public void approveInvitation(int approver, int inviter) {
+      for (Invitation tmp : _Invitations) {
+          if (tmp.getInviter().getId() == inviter && tmp.getNewFriend().getId() == approver) {
+              tmp.approve(GetUser(approver));
+          }
+      }
+    }
+
+    @Override
+    public void RemoveInvitation(int inviter, int invited) throws Exception {
+        for (Invitation tmp : _Invitations) {
+          if (tmp.getInviter().getId() == inviter && tmp.getNewFriend().getId() == invited) {
+              _Invitations.remove(tmp);
+          }
+      }
+    }
+
+    @Override
+    public ArrayList<Code> GetAllUserCodes(int userId) {
+        ArrayList<Code> ret = new ArrayList<Code>();
+        
+        for (Code code : _Codes) {
+            if (code.getAuthor_id() == userId)
+                ret.add(code);
+        }
+        return ret;
     }
     
     

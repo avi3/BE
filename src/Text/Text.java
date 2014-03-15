@@ -21,6 +21,11 @@ public class Text {
   private int author_id;
   private final Date creationDate;
   
+  public void update(Text text) {
+      this.author_id = text.getAuthor_id();
+      this.lines = text.getLines();
+  }
+  
   private void parse_lines(String text) {
       int beginIndex = 0, endIndex = 0;
       int lineNumber = 0;

@@ -8,8 +8,9 @@ package Interface;
 
 import Text.Code;
 import java.util.ArrayList;
+import java.util.List;
 import person.Invitation;
-import person.User;
+import person.*;
 
 /**
  *
@@ -24,21 +25,26 @@ public interface Backend {
      */
     public abstract void AddUser(User tmp) throws Exception;
 
+    public abstract void updateUser(User user);
     
-    
+    public abstract User GetUser(int id);
     /**
      * @return all users()
      * @throws Exception 
      */
     public abstract ArrayList<User> GetAllUsers() throws Exception;
     
+   public abstract ArrayList<Friend> getFriends(int userId);
    
-    /**
-     * Function to add code
-     * @param tmp
-     * @throws Exception 
-     */
-    public abstract void AddCode(Code tmp) throws Exception;
+   public abstract ArrayList<NotFriend> getAllUsers() ;
+   
+   public abstract void assignCodeId(Code code);
+   
+   public abstract void assignUserId(User user);
+   
+    public abstract void AddCode( Code tmp) throws Exception;
+    
+    public abstract void updateCode(Code code);
     
     /**
      * @return all codes()
@@ -46,13 +52,12 @@ public interface Backend {
      */
     public abstract ArrayList<Code> GetAllCodes() throws Exception;
     
+    public abstract ArrayList<Code> GetAllUserCodes(int userId);
+    public abstract List<Code> GetUserCodes(int user, boolean isFriend) throws Exception;
+    
    
-    /**
-     * Function to add invitation
-     * @param tmp
-     * @throws Exception 
-     */
-    public abstract void AddInvitation(Invitation tmp) throws Exception;
+   
+    public abstract void invite(int inviterId, int invitedId) throws Exception;
     
     /**
      * @return all invitations()
@@ -60,12 +65,16 @@ public interface Backend {
      */
     public abstract ArrayList<Invitation> GetAllInvitations() throws Exception;
     
-    /**
-     * Function to remove code by author
-     * @param id
-     * @throws Exception 
-     */
-    public abstract void RemoveCode(int id) throws Exception;
+    public abstract List<Invitation> getUserOutGoing(int  userId);
+    public abstract List<Invitation> getUserPending(int  userId);
+    
+    
+    
+    public abstract void notifyOnline(int userId);
+    
+    public abstract void approveInvitation(int approver, int invited);
+   
+    public abstract void RemoveCode(int codeId) throws Exception;
     
      /**
      * Function to remove user by id
@@ -75,11 +84,8 @@ public interface Backend {
     public abstract void RemoveUser(int id) throws Exception;
        
     
-     /**
-     * Function to remove invitation by id of invater
-     * @param id
-     * @throws Exception 
-     */
-    public abstract void RemoveInvitation(int id) throws Exception;
+     
+     
+    public abstract void RemoveInvitation(int inviter, int invited) throws Exception;
       
 }
