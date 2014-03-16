@@ -218,12 +218,25 @@ public class Backend_DAO_List_impl implements Backend{
 
     @Override
     public List<Invitation> getUserOutGoing(int userId) {
-        return GetUser(userId).getOutGoingInvitations();
+        List<Invitation> ret = new ArrayList<Invitation>();
+        
+        for (Invitation invit : _Invitations) {
+            if (invit.getInviter().getId() == userId)
+                ret.add(invit);
+        }
+        return ret;
     }
 
     @Override
     public List<Invitation> getUserPending(int userId) {
-        return GetUser(userId).getPendingInvitations();
+        List<Invitation> ret = new ArrayList<Invitation>();
+        
+        for (Invitation invit : _Invitations) {
+            if (invit.getNewFriend().getId() == userId)
+                ret.add(invit);
+        }
+        return ret;
+        
     }
 
     @Override
@@ -236,6 +249,7 @@ public class Backend_DAO_List_impl implements Backend{
       for (Invitation tmp : _Invitations) {
           if (tmp.getInviter().getId() == inviter && tmp.getNewFriend().getId() == approver) {
               tmp.approve(GetUser(approver));
+              GetUser(approver).addFriend(GetUser(inviter));
           }
       }
     }
@@ -267,6 +281,17 @@ public class Backend_DAO_List_impl implements Backend{
                 return user;
         }
         throw new IllegalArgumentException("user not found");
+    }
+
+    @Override
+    public void findApprovedFriends(int userId) throws Exception{
+        User toAdd = GetUser(userId);
+        for (Invitation invit : _Invitations) {
+            if (invit.getInviter().getId() == userId && invit.isApproved()) {
+                toAdd.addFriend((invit.getApprovedFriend(toAdd)));
+                _Invitations.remove(invit);
+            }
+        }
     }
     
     

@@ -70,6 +70,7 @@ public interface Backend {
     public abstract List<Invitation> getUserOutGoing(int  userId);
     public abstract List<Invitation> getUserPending(int  userId);
     
+    public abstract void findApprovedFriends(int userId) throws Exception;
     
     
     public abstract void notifyOnline(int userId);
