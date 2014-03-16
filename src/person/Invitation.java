@@ -113,4 +113,9 @@ public class Invitation {
     public void setInvitationDate(Date invitationDate) {
         this.invitationDate = invitationDate;
     }
+    
+    @Override
+    public String toString() {
+        return "inviter id: " + inviter.getId() + " invited id: " + newFriend.getId() + " invitation date: " + invitationDate.toString();
+    }
 }

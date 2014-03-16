@@ -160,4 +160,9 @@ public class Code extends Text{
     public void setCodeId(int codeId) {
         this.codeId = codeId;
     }
+    
+    @Override
+    public String toString() {
+        return  "code id: " + getCodeId() + " lang: " + getLang() + " permission: " + getPermission() + " subject: " + getSubject() + " text: " + super.toString();
+    }
 }

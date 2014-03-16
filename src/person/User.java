@@ -186,6 +186,7 @@ public class User implements Friend, NotFriend {
         for (Code tmp : codes) {
             if (tmp.getCodeId() == code.getCodeId())
                 codes.remove(tmp);
+            return;
         }
         throw new IllegalArgumentException("this code doesn't belong to this user");
     }
@@ -422,7 +423,7 @@ public class User implements Friend, NotFriend {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-       sb.append("id: " + id + "username: "  + username + "password: " + password + "email: " + emailAddress);
+       sb.append("id: " + id + " username: "  + username + " password: " + password + " email: " + emailAddress + " codes: ");
       for (Code c : codes)
             sb.append(c.getCodeId());
         return sb.toString();

@@ -11,6 +11,7 @@ import Text.*;
 import java.util.ArrayList;
 import java.util.List;
 import Interface.Backend;
+import java.util.Date;
 
 /**
  *simple implementation data
@@ -101,11 +102,12 @@ public class Backend_DAO_List_impl implements Backend{
                         user.removeCode(code);
                         break;
                 }
+                }
                  _Codes.remove(code);
                  return;
             }
           throw new Exception("code not found");
-            }
+           
     }
     
      /**
@@ -179,8 +181,8 @@ public class Backend_DAO_List_impl implements Backend{
      * @return 
      */
     @Override
-    public ArrayList<NotFriend> getAllUsers() {
-        ArrayList<NotFriend> ret = new ArrayList<NotFriend>();
+    public ArrayList<NotFriend> getAllAsNotFriend() {
+        ArrayList<NotFriend> ret = new ArrayList<>();
         for (User user : _Users)
             ret.add(user);
         return ret;
@@ -364,7 +366,7 @@ public class Backend_DAO_List_impl implements Backend{
     }
 
     /**
-     * function to find approved friend
+     * function to find new approved friend
      * @param userId
      * @throws Exception 
      */
@@ -377,6 +379,34 @@ public class Backend_DAO_List_impl implements Backend{
                 _Invitations.remove(invit);
             }
         }
+    }
+
+    @Override
+    public List<Friend> GetUserFriends(int userId) {
+        return GetUser(userId).getFriends();
+    }
+
+    @Override
+    public List<Invitation> GetInvitationsAfter(Date date) {
+       List<Invitation> ret = new ArrayList<Invitation>();
+       
+       for (Invitation invit : _Invitations) {
+           if (invit.getInvitationDate().after(date))
+               ret.add(invit);
+       }
+       return ret;
+    }
+
+    @Override
+    public List<Code> GetCodesAfter(Date date) {
+        List<Code> ret = new ArrayList<Code>();
+       
+       for (Code code : _Codes) {
+           if (code.getCreationDate().after(date))
+               ret.add(code);
+       }
+       return ret;
+        
     }
     
     

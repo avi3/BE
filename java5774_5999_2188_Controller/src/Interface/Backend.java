@@ -8,6 +8,7 @@ package Interface;
 
 import Text.Code;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import person.Invitation;
 import person.*;
@@ -65,7 +66,7 @@ public interface Backend {
      * function to get alluser
      * @return 
      */
-    public abstract ArrayList<NotFriend> getAllUsers() ;
+    public abstract ArrayList<NotFriend> getAllAsNotFriend() ;
    
    /**
      * function to assign code according to id
@@ -191,4 +192,9 @@ public interface Backend {
      */
     public abstract void RemoveInvitation(int inviter, int invited) throws Exception;
       
+    public abstract List<Friend> GetUserFriends(int userid);
+     
+    public abstract List<Invitation> GetInvitationsAfter(Date date);
+    
+    public abstract List<Code> GetCodesAfter(Date date);
 }
