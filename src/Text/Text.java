@@ -13,7 +13,7 @@ import java.util.Date;
 import person.*;
 
 /**
- *
+ *Class to represent text
  * @author חיים
  */
         
@@ -22,11 +22,19 @@ public class Text {
   private int author_id;
   private final Date creationDate;
   
+  /**
+   * funtion to update text
+   * @param text 
+   */
   public void update(Text text) {
       this.author_id = text.getAuthor_id();
       this.lines = text.getLines();
   }
   
+  /**
+   * funtion to parse line
+   * @param text 
+   */
   private void parse_lines(String text) {
       int endIndex = 1;
       int lineNumber = 0;
@@ -44,14 +52,23 @@ public class Text {
               throw new ArrayStoreException();
       }
   }
-  
+  /**
+   * function to set line number
+   * @param initialLine
+   * @param initNumber 
+   */
   public void setLineNumbers(int initialLine, int initNumber) {
       if (lines.size() < initialLine)
           throw new IllegalArgumentException("line number out of range");
       for (Line l : getLines().subList(initialLine, getLines().size()))
           l.setLineNumber(initNumber++);
   }
-  
+  /**
+   * constractor
+   * @param author
+   * @param text
+   * @throws InstantiationException 
+   */
   public Text(User author, String text) throws InstantiationException{
       this.creationDate = new Date();
       this.author_id = author.getId();
@@ -63,7 +80,10 @@ public class Text {
            throw new InstantiationException();
        }
   }
- 
+ /**
+  * function to override "to string"
+  * @return 
+  */
   @Override
   public String toString()
   {
@@ -75,6 +95,10 @@ public class Text {
       return sb.toString();
   }
   
+  /**
+   * function to add line
+   * @param newLine 
+   */ 
   public void addLine(Line newLine) {
       if (newLine.getLineNumber() < 0)
           throw new IllegalArgumentException("negative line number");
@@ -90,6 +114,11 @@ public class Text {
       Collections.sort(lines);
   }
   
+  /**
+   * remove range of lines
+   * @param start
+   * @param end 
+   */
   /* remove range of lines. including start & end */
   public void removeLines(int start, int end) {
       if (start < 0 || end > lines.size())

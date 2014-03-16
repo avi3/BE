@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import person.*;
 /**
- *
+ *Class to represent code
  * @author חיים
  */
 public class Code extends Text{
@@ -23,7 +23,25 @@ public class Code extends Text{
     private String subject;
 
     
+    /**
+     * Constructor code
+     * @param author
+     * @param text
+     * @param lang
+     * @param perm
+     * @param subject
+     * @throws InstantiationException 
+     */
     
+    /**
+     * Constructor code
+     * @param author
+     * @param text
+     * @param lang
+     * @param perm
+     * @param subject
+     * @throws InstantiationException 
+     */
     public Code(User author, String text, ProgramLang lang, Permissions perm, String subject)  throws InstantiationException{
         super(author, text);
         this.lang = lang;
@@ -32,6 +50,10 @@ public class Code extends Text{
         this.comments = new ArrayList<Comment>();
     }
     
+    /**
+     * fuction to update the code
+     * @param code 
+     */
     public void update(Code code) {
         if (this.getCodeId() != code.getCodeId())
             throw new IllegalArgumentException("not the same code");
@@ -70,6 +92,10 @@ public class Code extends Text{
         this.comments = comments;
     }
     
+   /**
+    * function to add comment
+    * @param newComment 
+    */
     public void addComment(Comment newComment) {
         if (newComment.getCommentedLineNumber() >= lines.size())
             throw new IllegalArgumentException("commented line out of range");
@@ -77,6 +103,10 @@ public class Code extends Text{
         Collections.sort(comments);
     }
     
+    /**
+     * function to remove comment
+     * @param comment 
+     */
     public void removeComment(Comment comment) {
         
         for (Comment c : comments) {

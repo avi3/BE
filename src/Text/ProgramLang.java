@@ -7,7 +7,7 @@
 package Text;
 
 /**
- *
+ *enum to programLang
  * @author חיים
  */
 public enum ProgramLang {

@@ -16,9 +16,26 @@ import java.util.List;
  */
 public interface NotFriend {
     
+    /**
+     * function to invite friend
+     * @param inviter 
+     */
     /* invite this not friend to be a friend of the specified User */
     public abstract void invite(User inviter);
+    
+    /**
+    * @return the not friend code
+    */ 
     public abstract List<Code> getNotFriendCodes();
+    
+     /**
+     * @return the id
+     */
     public int getId();
+    
+    
+    /**
+     * @return the username
+     */
     public String getUsername();
 }

@@ -14,8 +14,29 @@ import Text.Code;
  */
 public interface Friend {
 
+     /**
+     * @return the friend code
+     */
     public abstract List<Code> getFriendCodes(); 
+ 
+    /**
+     * function to add coment
+     * @param commentator
+     * @param code
+     * @param lineNumber
+     * @param commentText
+     * @throws InstantiationException 
+     */
     public abstract void addComment(User commentator, Code code, int lineNumber, String commentText) throws InstantiationException ;
+    
+     /**
+     * @return the id
+     */
     public abstract int getId();
+    
+    
+    /**
+     * @return the username
+     */
     public abstract String getUsername();
 }

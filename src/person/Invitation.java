@@ -7,7 +7,7 @@
 package person;
 import java.util.Date;
 /**
- *
+ * Class to represent invitation
  * @author חיים
  */
 public class Invitation {
@@ -17,6 +17,11 @@ public class Invitation {
     private boolean approved;
     private Date invitationDate;
     
+    /**
+     * constractor
+     * @param inviter
+     * @param newFriend 
+     */
     //only user can create it, but we don't want to save it as user so the invited can't see its data
     public Invitation(User inviter, NotFriend newFriend) {
         this.inviter = inviter;
@@ -24,7 +29,10 @@ public class Invitation {
         this.invitationDate = new Date();
         this.approved = false;
     }
-    
+    /**
+     * function to approve friend
+     * @param validator 
+     */
     public void approve(User validator) {
         if (validator.getId() == getNewFriend().getId()) {
             setApproved(true);

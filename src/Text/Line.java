@@ -7,7 +7,7 @@
 package Text;
 
 /**
- *
+ *Class to represent line
  * @author חיים
  */
 public class Line implements Comparable<Line>{
@@ -15,13 +15,18 @@ public class Line implements Comparable<Line>{
     private int tabsStart;
     private String text;
 
+    /**
+     * constractor
+     * @param text
+     * @param number 
+     */
     public Line(String text, int number) {
         this.text = text;
         this.lineNumber = number;
     }
     
     /**
-     *
+     *function to override "compare to"
      * @param otherLine
      * @return 0 if same line number, greater than 0 if this line comes after the other line
      * less than 0 if this line is before other line

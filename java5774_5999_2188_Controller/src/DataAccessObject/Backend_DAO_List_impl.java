@@ -130,13 +130,21 @@ public class Backend_DAO_List_impl implements Backend{
     }
     
     
-
+    /**
+     * function to update user
+     * @param user 
+     */
     @Override
     public void updateUser(User user) {
         User tmp = GetUser(user.getId());
         tmp.update(user);
     }
 
+    /**
+     * function to get user
+     * @param id
+     * @return 
+     */
     @Override
     public User GetUser(int id) {
         for (User tmp : _Users) {
@@ -146,6 +154,11 @@ public class Backend_DAO_List_impl implements Backend{
        throw new IllegalArgumentException("user not found"); 
     }
     
+    /**
+     * function to grt friends
+     * @param userId
+     * @return 
+     */
     @Override
     public ArrayList<Friend> getFriends(int userId) {
         ArrayList<Friend> ret = new ArrayList<Friend>(); 
@@ -161,6 +174,10 @@ public class Backend_DAO_List_impl implements Backend{
         return ret;
     }
 
+    /**
+     * function to get alluser
+     * @return 
+     */
     @Override
     public ArrayList<NotFriend> getAllUsers() {
         ArrayList<NotFriend> ret = new ArrayList<NotFriend>();
@@ -170,7 +187,10 @@ public class Backend_DAO_List_impl implements Backend{
     }
 
     
-
+/**
+ * function to update code
+ * @param code 
+ */
     @Override
     public void updateCode(Code code) {
         for (Code tmp : _Codes) {
@@ -185,6 +205,13 @@ public class Backend_DAO_List_impl implements Backend{
         }
     }
 
+    /**
+     * function to get user code
+     * @param userId
+     * @param isFriend
+     * @return
+     * @throws Exception 
+     */
     @Override
     public List<Code> GetUserCodes(int userId, boolean isFriend) throws Exception {
         User user = GetUser(userId);
@@ -195,6 +222,12 @@ public class Backend_DAO_List_impl implements Backend{
             return ((NotFriend)user).getNotFriendCodes();
     }
 
+    /**
+     * function to add invite
+     * @param inviterId
+     * @param invitedId
+     * @throws Exception 
+     */
     @Override
     public void invite(int inviterId, int invitedId) throws Exception {
         User inviter  = GetUser(inviterId);
@@ -206,16 +239,29 @@ public class Backend_DAO_List_impl implements Backend{
 
     
 
+    /**
+     * function to assign code according to id
+     * @param code 
+     */
     @Override
     public void assignCodeId(Code code) {
         code.setCodeId(nextCodeId++);
     }
 
+     /***
+     * function to assign user according to id
+     * @param user 
+     */
     @Override
     public void assignUserId(User user) {
        user.setId(nextUserId++);
     }
 
+    /**
+     * function to get user out going
+     * @param userId
+     * @return 
+     */
     @Override
     public List<Invitation> getUserOutGoing(int userId) {
         List<Invitation> ret = new ArrayList<Invitation>();
@@ -227,6 +273,11 @@ public class Backend_DAO_List_impl implements Backend{
         return ret;
     }
 
+    /**
+     * function to get user pending
+     * @param userId
+     * @return 
+     */
     @Override
     public List<Invitation> getUserPending(int userId) {
         List<Invitation> ret = new ArrayList<Invitation>();
@@ -239,11 +290,21 @@ public class Backend_DAO_List_impl implements Backend{
         
     }
 
+    
+    /**
+     * function to notify online
+     * @param userId 
+     */
     @Override
     public void notifyOnline(int userId) {
         GetUser(userId).setIsOnline(true);
     }
 
+    /**
+     * function to approve invitation
+     * @param approver
+     * @param inviter 
+     */
     @Override
     public void approveInvitation(int approver, int inviter) {
       for (Invitation tmp : _Invitations) {
@@ -254,6 +315,12 @@ public class Backend_DAO_List_impl implements Backend{
       }
     }
 
+    /**
+     * function to remove invitation
+     * @param inviter
+     * @param invited
+     * @throws Exception 
+     */
     @Override
     public void RemoveInvitation(int inviter, int invited) throws Exception {
         for (Invitation tmp : _Invitations) {
@@ -263,6 +330,12 @@ public class Backend_DAO_List_impl implements Backend{
       }
     }
 
+    
+    /**
+     * function  to get all user codes
+     * @param userId
+     * @return 
+     */
     @Override
     public ArrayList<Code> GetAllUserCodes(int userId) {
         ArrayList<Code> ret = new ArrayList<Code>();
@@ -274,6 +347,13 @@ public class Backend_DAO_List_impl implements Backend{
         return ret;
     }
 
+    
+    /**
+     * function to get user
+     * @param username
+     * @param password
+     * @return 
+     */
     @Override
     public User GetUser(String username, String password) {
         for (User user : _Users) {
@@ -283,6 +363,11 @@ public class Backend_DAO_List_impl implements Backend{
         throw new IllegalArgumentException("user not found");
     }
 
+    /**
+     * function to find approved friend
+     * @param userId
+     * @throws Exception 
+     */
     @Override
     public void findApprovedFriends(int userId) throws Exception{
         User toAdd = GetUser(userId);

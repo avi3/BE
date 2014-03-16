@@ -7,7 +7,7 @@
 package Text;
 
 /**
- *
+ * enum to permissions
  * @author חיים
  */
 public enum Permissions {

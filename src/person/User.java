@@ -32,6 +32,15 @@ public class User implements Friend, NotFriend {
     private List<Invitation> outGoingInvitations;
     private List<Code> codes;
     
+    
+    /**
+     * function to add coment
+     * @param commentator
+     * @param code
+     * @param lineNumber
+     * @param commentText
+     * @throws InstantiationException 
+     */
     @Override
     public void addComment(User commentator, Code code, int lineNumber, String commentText) throws InstantiationException 
      {
@@ -47,6 +56,11 @@ public class User implements Friend, NotFriend {
         code.addComment(new Comment(commentator, commentText, code, lineNumber ));
     }
      
+    
+    /**
+     * function to update details
+     * @param user 
+     */
     public void update(User user) {
         if (this.getId() != user.getId())
             throw new IllegalArgumentException("not the same user");
@@ -60,6 +74,10 @@ public class User implements Friend, NotFriend {
         this.isOnline = user.isOnline();
     }
     
+    /**
+     * function to invite friend
+     * @param inviter 
+     */
     @Override
     public void invite(User inviter) {
         for (Invitation invit : pendingInvitations) {
@@ -71,7 +89,11 @@ public class User implements Friend, NotFriend {
     }
     
   
-   
+   /**
+    * Function to verify the validity of strings
+    * @param s
+    * @return 
+    */
     private boolean hasChar(String s) {
         for (int i = 0; i < s.length(); i++)
             if (s.charAt(i) >= 'a' && s.charAt(i) <= 'z' ||
@@ -80,6 +102,11 @@ public class User implements Friend, NotFriend {
         return false;
     }
     
+    /**
+     * Function to verify the validity of numbers
+     * @param s
+     * @return 
+     */
     private boolean hasDigit(String s) {
         for (int i = 0; i < s.length(); i++)
             if (s.charAt(i) >= '0' && s.charAt(i) <= '9')
@@ -87,11 +114,21 @@ public class User implements Friend, NotFriend {
         return false;
     }
     
+    /**
+     *     Function to verify the validity of password
+     * @param password 
+     */
     private void validatePassword(String password) {
         if (!hasDigit(password) || !hasChar(password))
             throw new IllegalArgumentException();
     }
     
+    /**
+     * constractor
+     * @param username
+     * @param password
+     * @param emailAddress 
+     */
     public User(String username, String password, String emailAddress) {
         validatePassword(password);
         this.password = password;
@@ -117,6 +154,10 @@ public class User implements Friend, NotFriend {
             throw new ArrayStoreException();
     }
     
+    /**
+     * function to remove friend
+     * @param friend 
+     */
     public void removeFriend(Friend friend) {
         for (Friend f : getFriends())
             if (f.getId() == friend.getId())
@@ -137,6 +178,10 @@ public class User implements Friend, NotFriend {
             throw new ArrayStoreException();
     }
     
+    /**
+     * function to remove code
+     * @param code 
+     */
     public void removeCode(Code code) {
         for (Code tmp : codes) {
             if (tmp.getCodeId() == code.getCodeId())
@@ -145,6 +190,10 @@ public class User implements Friend, NotFriend {
         throw new IllegalArgumentException("this code doesn't belong to this user");
     }
     
+    /**
+     * function to update code
+     * @param code 
+     */
     public void updateCode(Code code) {
         for (Code tmp : codes) {
             if (tmp.getCodeId() == code.getCodeId())
@@ -152,6 +201,11 @@ public class User implements Friend, NotFriend {
         }
         throw new IllegalArgumentException("code not found");
     }
+    
+    /**
+     * function to update out going invitations
+     * @throws Exception 
+     */
     public void updateoutGoingInvitations() throws Exception {
         for (Invitation invitation : outGoingInvitations) {
             if (invitation.isApproved()) {
@@ -161,6 +215,10 @@ public class User implements Friend, NotFriend {
         }
     }
     
+    /**
+     * function to add pending invitation
+     * @param newInvitation 
+     */
     public void addPendingInvitation(Invitation newInvitation) {
         if (newInvitation.getNewFriend().getId() != this.getId())
             throw new IllegalArgumentException("invited mismatch");
@@ -172,6 +230,11 @@ public class User implements Friend, NotFriend {
             throw new ArrayStoreException();
     }
    
+    
+    /**
+     * function to remove pending invitation
+     * @param pending 
+     */
     public void removePendingInvitation(Invitation pending) {
         for (Invitation tmp : pendingInvitations) {
             if (tmp == pending)
@@ -180,6 +243,10 @@ public class User implements Friend, NotFriend {
         throw new IllegalArgumentException("pending invitation not found");
     }
     
+    /**
+     * function to add out going invitation
+     * @param newInvitation 
+     */
     public void addOutGoingInvitation(Invitation newInvitation) {
         if (newInvitation.getInviter().getId() != this.getId())
             throw new IllegalArgumentException("inviter mismatch");
@@ -191,6 +258,10 @@ public class User implements Friend, NotFriend {
             throw new ArrayStoreException();
     }
     
+    /**
+     * function to remove out going invitation
+     * @param pending 
+     */
     public void removeOutgoingInvitation(Invitation pending) {
         for (Invitation tmp : outGoingInvitations) {
             if (tmp == pending)
@@ -291,6 +362,10 @@ public class User implements Friend, NotFriend {
         return outGoingInvitations;
     }
 
+    
+    /**
+     * @return the friend code
+     */
     @Override
     public List<Code> getFriendCodes() {
         List<Code> toFriend = new ArrayList();
@@ -304,6 +379,9 @@ public class User implements Friend, NotFriend {
         return toFriend;
     }
 
+   /**
+    * @return the not friend code
+    */ 
     @Override
     public List<Code> getNotFriendCodes() {
         List<Code> toFriend = new ArrayList();
@@ -337,6 +415,10 @@ public class User implements Friend, NotFriend {
     }
 
     
+    /**
+     *override the to string
+     * @return 
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -344,7 +426,7 @@ public class User implements Friend, NotFriend {
       for (Code c : codes)
             sb.append(c.getCodeId());
         return sb.toString();
-}
+    }
         
     
 

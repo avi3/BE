@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import person.*;
 /**
- *
+ *Class to represent comment
  * @author חיים
  */
 public class Comment extends Text implements Comparable<Comment>{
@@ -20,7 +20,14 @@ public class Comment extends Text implements Comparable<Comment>{
     private boolean viewed;
     private List<Comment> replies;
    
-    
+    /**
+     * constractor
+     * @param author
+     * @param text
+     * @param commented
+     * @param lineNumber
+     * @throws InstantiationException 
+     */
     public Comment(User author, String text, Text commented, int lineNumber) throws InstantiationException{
         super(author, text);
         commentedText = commented;
@@ -34,7 +41,11 @@ public class Comment extends Text implements Comparable<Comment>{
     {
         return this.getCreationDate().compareTo(otherComment.getCreationDate());
     }
-
+    
+    /**
+     * function to add reply
+     * @param reply 
+     */
     public void addReply(Comment reply) {
         if (reply.getCommentedLineNumber() >= lines.size())
             throw new IllegalArgumentException("commented line out of range");
@@ -42,6 +53,10 @@ public class Comment extends Text implements Comparable<Comment>{
         Collections.sort(replies);
     }
     
+    /**
+     * function to remove reply
+     * @param reply 
+     */
     public void removeReply(Comment reply) {
         for (Comment c : replies) {
             if (c == reply)
