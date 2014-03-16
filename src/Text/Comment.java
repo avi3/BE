@@ -6,6 +6,7 @@
 
 package Text;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import person.*;
@@ -24,6 +25,7 @@ public class Comment extends Text implements Comparable<Comment>{
         super(author, text);
         commentedText = commented;
         commentedLineNumber = lineNumber;
+        this.replies = new ArrayList<Comment>();
     }
     
     //to sort comments by date

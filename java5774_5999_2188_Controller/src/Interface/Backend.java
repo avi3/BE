@@ -28,6 +28,8 @@ public interface Backend {
     public abstract void updateUser(User user);
     
     public abstract User GetUser(int id);
+    
+    public abstract User GetUser(String username, String password);
     /**
      * @return all users()
      * @throws Exception 

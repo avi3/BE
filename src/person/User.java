@@ -23,7 +23,7 @@ public class User implements Friend, NotFriend {
     private  int  id;
     private String username;
     private String password;
-    private String email_address;
+    private String emailAddress;
     private List<Friend> friends;
     private boolean isOnline;
     
@@ -51,7 +51,7 @@ public class User implements Friend, NotFriend {
         if (this.getId() != user.getId())
             throw new IllegalArgumentException("not the same user");
         this.codes = user.getMyCodes();
-        this.email_address = user.email_address;
+        this.emailAddress = user.emailAddress;
         this.username = user.username;
         this.friends = user.getFriends();
         this.password= user.password;
@@ -92,11 +92,15 @@ public class User implements Friend, NotFriend {
             throw new IllegalArgumentException();
     }
     
-    public User(String username, String password, String email_address) {
+    public User(String username, String password, String emailAddress) {
         validatePassword(password);
         this.password = password;
         this.username = username;
-        this.email_address = email_address;
+        this.emailAddress = emailAddress;
+        this.codes = new ArrayList<Code>();
+        this.friends = new ArrayList<Friend>();
+        this.outGoingInvitations = new ArrayList<Invitation>();
+        this.pendingInvitations = new ArrayList<Invitation>();
         
     }
     
@@ -248,15 +252,15 @@ public class User implements Friend, NotFriend {
     /**
      * @return the email_address
      */
-    public String getEmail_address() {
-        return email_address;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
     /**
      * @param email_address the email_address to set
      */
-    public void setEmail_address(String email_address) {
-        this.email_address = email_address;
+    public void setEmailAddress(String email_address) {
+        this.emailAddress = emailAddress;
     }
 
     /**
@@ -333,7 +337,15 @@ public class User implements Friend, NotFriend {
     }
 
     
-
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+       sb.append("id: " + id + "username: "  + username + "password: " + password + "email: " + emailAddress);
+      for (Code c : codes)
+            sb.append(c.getCodeId());
+        return sb.toString();
+}
+        
     
 
     

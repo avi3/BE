@@ -6,6 +6,7 @@
 
 package Text;
 //import java.lang.String;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Date;
@@ -27,15 +28,18 @@ public class Text {
   }
   
   private void parse_lines(String text) {
-      int beginIndex = 0, endIndex = 0;
+      int endIndex = 1;
       int lineNumber = 0;
       
-      while (endIndex < text.length()) {
+      while (endIndex > 0) {
+          String s = text;
           endIndex = text.indexOf("\n");
-          Line tmp = new Line(text.substring(beginIndex, endIndex), lineNumber);
+          if (endIndex > 0)
+              s = text.substring(0, endIndex);
+          Line tmp = new Line(s, lineNumber);
+          
           lineNumber++;
-          beginIndex = endIndex + 1;
-          text = text.substring(beginIndex, text.length());
+          text = text.substring(endIndex + 1, text.length() - 1);
           if  (!lines.add(tmp))
               throw new ArrayStoreException();
       }
@@ -51,6 +55,7 @@ public class Text {
   public Text(User author, String text) throws InstantiationException{
       this.creationDate = new Date();
       this.author_id = author.getId();
+      this.lines = new ArrayList<Line>();
       try {
           parse_lines(text);
       }

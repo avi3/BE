@@ -20,8 +20,8 @@ public class Backend_DAO_List_impl implements Backend{
     private List<User> _Users;
     private List<Code> _Codes;
     private List<Invitation> _Invitations; 
-    private int nextCodeId = 0;
-    private int nextUserId = 0;
+    private int nextCodeId = 1;
+    private int nextUserId = 1;
     
     public Backend_DAO_List_impl(){
         _Users = new ArrayList<User>();
@@ -121,7 +121,7 @@ public class Backend_DAO_List_impl implements Backend{
                 /* remove user codes */
                 List<Code> codes = GetAllUserCodes(id);
                 for (Code code : codes) {
-                    RemoveCode(code);
+                    _Codes.remove(code);
                 }
                  _Users.remove(user);
                 return;
@@ -213,7 +213,7 @@ public class Backend_DAO_List_impl implements Backend{
 
     @Override
     public void assignUserId(User user) {
-       user.setId(nextUserId);
+       user.setId(nextUserId++);
     }
 
     @Override
@@ -258,6 +258,15 @@ public class Backend_DAO_List_impl implements Backend{
                 ret.add(code);
         }
         return ret;
+    }
+
+    @Override
+    public User GetUser(String username, String password) {
+        for (User user : _Users) {
+            if (user.getUsername().compareTo(username) == 0 && user.getPassword().compareTo(password) == 0)
+                return user;
+        }
+        throw new IllegalArgumentException("user not found");
     }
     
     

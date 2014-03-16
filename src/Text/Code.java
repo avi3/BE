@@ -6,6 +6,7 @@
 
 package Text;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import person.*;
@@ -28,6 +29,7 @@ public class Code extends Text{
         this.lang = lang;
         this.subject = subject;
         permission = perm;
+        this.comments = new ArrayList<Comment>();
     }
     
     public void update(Code code) {
