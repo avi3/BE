@@ -121,4 +121,10 @@ public class Comment extends Text implements Comparable<Comment>{
     public void setReplies(List<Comment> replies) {
         this.replies = replies;
     }
+    
+    @Override
+    public String toString() {
+        return "commented line: " + commentedLineNumber + "viewed: " + viewed + super.toString();
+    }
 }
+ 

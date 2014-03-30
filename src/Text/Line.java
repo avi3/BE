@@ -77,4 +77,9 @@ public class Line implements Comparable<Line>{
     public void setText(String text) {
         this.text = text;
     }
+    
+    @Override
+    public String toString() {
+        return "line number: " + lineNumber + " text: " + text;
+    }
 }
