@@ -118,9 +118,9 @@ public class User implements Friend, NotFriend {
      *     Function to verify the validity of password
      * @param password 
      */
-    private void validatePassword(String password) {
+    private void validatePassword(String password) throws Exception {
         if (!hasDigit(password) || !hasChar(password))
-            throw new IllegalArgumentException();
+            throw new Exception("Password must contain letters and digits");
     }
     
     /**
@@ -128,8 +128,9 @@ public class User implements Friend, NotFriend {
      * @param username
      * @param password
      * @param emailAddress 
+     * @throws java.lang.Exception 
      */
-    public User(String username, String password, String emailAddress) {
+    public User(String username, String password, String emailAddress) throws Exception {
         validatePassword(password);
         this.password = password;
         this.username = username;
