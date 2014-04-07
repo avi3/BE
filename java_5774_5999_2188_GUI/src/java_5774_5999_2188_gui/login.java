@@ -91,6 +91,8 @@ public class login extends javax.swing.JFrame {
 
         notif.setText("Not a member yet?");
 
+        signUp.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        signUp.setForeground(new java.awt.Color(51, 51, 255));
         signUp.setText("Sign up now!");
         signUp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

@@ -398,6 +398,7 @@ public class User implements Friend, NotFriend {
     /**
      * @return the isOnline
      */
+    @Override
     public boolean isOnline() {
         return isOnline;
     }
@@ -430,8 +431,12 @@ public class User implements Friend, NotFriend {
         return sb.toString();
     }
         
-    
+   
+    @Override
+    public String getEmail() {
+        return this.emailAddress;
+    }
 
     
-
+ 
 }

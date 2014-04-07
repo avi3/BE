@@ -39,4 +39,8 @@ public interface Friend {
      * @return the username
      */
     public abstract String getUsername();
+    
+    public abstract String getEmail();
+    
+    public abstract boolean isOnline();
 }

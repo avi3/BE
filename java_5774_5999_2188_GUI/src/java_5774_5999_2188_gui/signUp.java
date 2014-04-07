@@ -244,6 +244,8 @@ public class signUp extends javax.swing.JFrame {
                 passwordCheck.setVisible(true);
                 throw new Exception("Password re-type doesn't match. Please check your input");
             }
+            if (email.getText().equals(""))
+                throw new Exception("Please enter your email address");
             try {
         login.dataBase.AddUser(new User(username.getText(), password1.getText(), email.getText()));
             }

@@ -71,22 +71,31 @@
     </Component>
     <Component class="javax.swing.JLabel" name="welcome">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Wide Latin" size="14" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="welcome"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="friends">
       <Properties>
         <Property name="text" type="java.lang.String" value="My Friends"/>
+        <Property name="toolTipText" type="java.lang.String" value="see your current friends, and invite new ones!"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="text" type="java.lang.String" value="My Codes"/>
+        <Property name="toolTipText" type="java.lang.String" value="see what your friends think of your published codes, and comment codes of others!"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="text" type="java.lang.String" value="My invitations"/>
+        <Property name="toolTipText" type="java.lang.String" value="see who invited you to be his/her friend!"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="dateText">

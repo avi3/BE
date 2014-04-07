@@ -24,10 +24,10 @@ public class userGui extends javax.swing.JFrame {
      */
     public userGui(User me) {
         initComponents();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 	   //get current date time with Date()
-	   Date date = new Date();
-	  dateText.setText(dateFormat.format(date));
+	   Calendar cal = Calendar.getInstance();
+	  dateText.setText(dateFormat.format(cal.getTime()));
         welcome.setText("Welcome, " + me.getUsername() + "!");
         login.dataBase.notifyOnline(me.getId());
         
@@ -53,13 +53,18 @@ public class userGui extends javax.swing.JFrame {
 
         logo.setText("logo");
 
+        welcome.setFont(new java.awt.Font("Wide Latin", 1, 14)); // NOI18N
+        welcome.setForeground(new java.awt.Color(0, 0, 255));
         welcome.setText("welcome");
 
         friends.setText("My Friends");
+        friends.setToolTipText("see your current friends, and invite new ones!");
 
         jLabel2.setText("My Codes");
+        jLabel2.setToolTipText("see what your friends think of your published codes, and comment codes of others!");
 
         jLabel3.setText("My invitations");
+        jLabel3.setToolTipText("see who invited you to be his/her friend!");
 
         dateText.setEditable(false);
         dateText.setBackground(new java.awt.Color(204, 204, 255));
