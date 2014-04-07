@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -36,7 +36,7 @@
                       <Component id="dateText" min="-2" pref="197" max="-2" attributes="0"/>
                   </Group>
                   <Component id="friends" min="-2" pref="252" max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" pref="252" max="-2" attributes="0"/>
+                  <Component id="codes" min="-2" pref="252" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" pref="252" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -55,7 +55,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="friends" min="-2" pref="53" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" pref="53" max="-2" attributes="0"/>
+              <Component id="codes" min="-2" pref="53" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" pref="53" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="107" max="32767" attributes="0"/>
@@ -85,12 +85,18 @@
         <Property name="text" type="java.lang.String" value="My Friends"/>
         <Property name="toolTipText" type="java.lang.String" value="see your current friends, and invite new ones!"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="friendsMouseClicked"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="codes">
       <Properties>
         <Property name="text" type="java.lang.String" value="My Codes"/>
         <Property name="toolTipText" type="java.lang.String" value="see what your friends think of your published codes, and comment codes of others!"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="codesMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>

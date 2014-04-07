@@ -8,6 +8,7 @@ package java_5774_5999_2188_gui;
 
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import person.Friend;
 import person.User;
 
@@ -17,15 +18,26 @@ import person.User;
  */
 public class friends extends javax.swing.JFrame {
 
+    User user;
+    
+    int showing; //0 is all users, 1 is friends only
     /**
      * Creates new form friends
      */
     public friends(User me) {
         initComponents();
-        List<Friend> friends = login.dataBase.GetUserFriends(me.getId());
+        try {
+            user = me;
+        List<Friend> friends = login.dataBase.GetUserFriends(user.getId());
         FriendsModel model = new FriendsModel(friends);
         friendsTable.setModel(model);
-        
+        showingInfo.setText("Showing only your friends.");
+        showing = 1;
+        invite.setVisible(false);
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     /**
@@ -40,6 +52,10 @@ public class friends extends javax.swing.JFrame {
         logo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         friendsTable = new javax.swing.JTable();
+        showFriends = new javax.swing.JButton();
+        showAll = new javax.swing.JButton();
+        showingInfo = new javax.swing.JLabel();
+        invite = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,35 +82,117 @@ public class friends extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(friendsTable);
 
+        showFriends.setText("My Friends");
+        showFriends.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showFriendsActionPerformed(evt);
+            }
+        });
+
+        showAll.setText("Show all Users");
+        showAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showAllActionPerformed(evt);
+            }
+        });
+
+        showingInfo.setText("jLabel1");
+
+        invite.setText("Invite this user to be your friend!");
+        invite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inviteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 20, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(showingInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(showFriends, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(showAll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(invite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))))
+                .addGap(0, 72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 258, Short.MAX_VALUE))
+                .addGap(63, 63, 63)
+                .addComponent(showingInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(showFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(showAll, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(invite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(170, 170, 170))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void showFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFriendsActionPerformed
+       try {
+        List<Friend> friends = login.dataBase.GetUserFriends(user.getId());
+        FriendsModel model = new FriendsModel(friends);
+        friendsTable.setModel(model);
+        showingInfo.setText("Showing only your friends.");
+        showing = 1;
+        invite.setVisible(false);
+       }
+       catch (Exception e) {
+           JOptionPane.showMessageDialog(null, e.getMessage());
+       }
+    }//GEN-LAST:event_showFriendsActionPerformed
+
+    private void showAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAllActionPerformed
+      try {
+          List<User> users = login.dataBase.GetAllUsers();
+          FriendsModel model = new FriendsModel(users, true);
+        friendsTable.setModel(model);
+        friendsTable.getSelectionModel().setSelectionInterval(0, 0);
+        showingInfo.setText("Showing all users.");
+        showing = 0;
+        invite.setVisible(true);
+      }
+      catch (Exception e) {
+          
+      }
+        
+    }//GEN-LAST:event_showAllActionPerformed
+
+    private void inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteActionPerformed
+        try {
+            login.dataBase.invite(user.getId(),login.dataBase.GetUser(friendsTable.getSelectedRow()).getId());
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_inviteActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable friendsTable;
+    private javax.swing.JButton invite;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel logo;
+    private javax.swing.JButton showAll;
+    private javax.swing.JButton showFriends;
+    private javax.swing.JLabel showingInfo;
     // End of variables declaration//GEN-END:variables
 }

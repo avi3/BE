@@ -11,6 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import person.User;
 
 /**
@@ -18,12 +21,13 @@ import person.User;
  * @author חיים
  */
 public class userGui extends javax.swing.JFrame {
-
+    User user;
     /**
      * Creates new form userGui
      */
     public userGui(User me) {
         initComponents();
+        user = me;
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 	   //get current date time with Date()
 	   Calendar cal = Calendar.getInstance();
@@ -45,11 +49,11 @@ public class userGui extends javax.swing.JFrame {
         logo = new javax.swing.JLabel();
         welcome = new javax.swing.JLabel();
         friends = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        codes = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         dateText = new javax.swing.JFormattedTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         logo.setText("logo");
 
@@ -59,9 +63,19 @@ public class userGui extends javax.swing.JFrame {
 
         friends.setText("My Friends");
         friends.setToolTipText("see your current friends, and invite new ones!");
+        friends.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                friendsMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setText("My Codes");
-        jLabel2.setToolTipText("see what your friends think of your published codes, and comment codes of others!");
+        codes.setText("My Codes");
+        codes.setToolTipText("see what your friends think of your published codes, and comment codes of others!");
+        codes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                codesMouseClicked(evt);
+            }
+        });
 
         jLabel3.setText("My invitations");
         jLabel3.setToolTipText("see who invited you to be his/her friend!");
@@ -87,7 +101,7 @@ public class userGui extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(friends, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(codes, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -102,7 +116,7 @@ public class userGui extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(friends, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(codes, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 107, Short.MAX_VALUE))
@@ -111,15 +125,31 @@ public class userGui extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void friendsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_friendsMouseClicked
+       try {
+           JFrame friends = new friends(user);
+           friends.setVisible(true);
+       }
+       catch (Exception e) {
+           JOptionPane.showMessageDialog(null, "Error opening friends list");
+       }
+        
+    }//GEN-LAST:event_friendsMouseClicked
+
+    private void codesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codesMouseClicked
+Codes codes2 = new Codes(user.getId(), true);
+codes2.setVisible(true);
+    }//GEN-LAST:event_codesMouseClicked
+
     /**
      * @param args the command line arguments
      */
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel codes;
     private javax.swing.JFormattedTextField dateText;
     private javax.swing.JLabel friends;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel welcome;
