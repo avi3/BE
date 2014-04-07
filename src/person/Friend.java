@@ -40,7 +40,12 @@ public interface Friend {
      */
     public abstract String getUsername();
     
-    public abstract String getEmail();
+    /**
+     *
+     * @return
+     */
+    public abstract String getEmailAddress();
+    
     
     public abstract boolean isOnline();
 }
