@@ -325,6 +325,7 @@ public class User implements Friend, NotFriend {
     /**
      * @return the email_address
      */
+    @Override
     public String getEmailAddress() {
         return emailAddress;
     }
@@ -430,12 +431,12 @@ public class User implements Friend, NotFriend {
             sb.append(c.getCodeId());
         return sb.toString();
     }
+
+    
+    
         
    
-    @Override
-    public String getEmail() {
-        return this.emailAddress;
-    }
+    
 
     
  
