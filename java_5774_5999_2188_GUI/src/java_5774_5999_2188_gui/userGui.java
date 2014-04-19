@@ -6,14 +6,16 @@
 
 package java_5774_5999_2188_gui;
 
-import com.sun.org.apache.xalan.internal.lib.ExsltDatetime;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import person.Friend;
 import person.User;
 
 /**
@@ -27,14 +29,26 @@ public class userGui extends javax.swing.JFrame {
      */
     public userGui(User me) {
         initComponents();
+        try {
         user = me;
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 	   //get current date time with Date()
 	   Calendar cal = Calendar.getInstance();
 	  dateText.setText(dateFormat.format(cal.getTime()));
         welcome.setText("Welcome, " + me.getUsername() + "!");
-        login.dataBase.notifyOnline(me.getId());
-        
+        login.dataBase.notifyOnline(me.getId(), true);
+        List<Friend> friends = login.dataBase.findApprovedFriends(me.getId());
+        if (friends.size() > 0) {
+            StringBuilder sb  = new StringBuilder("You have " + friends.size() + " new friends!\n");
+            for (Friend f : friends) {
+                sb.append(f.getUsername() + " is now your friend.\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString());
+        }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     /**
@@ -52,15 +66,21 @@ public class userGui extends javax.swing.JFrame {
         codes = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         dateText = new javax.swing.JFormattedTextField();
+        logOutButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        logo.setText("logo");
+        logo.setBackground(new java.awt.Color(153, 153, 255));
+        logo.setFont(new java.awt.Font("Aharoni", 1, 48)); // NOI18N
+        logo.setForeground(new java.awt.Color(255, 255, 255));
+        logo.setText("Filesbook");
+        logo.setOpaque(true);
 
-        welcome.setFont(new java.awt.Font("Wide Latin", 1, 14)); // NOI18N
+        welcome.setFont(new java.awt.Font("Wide Latin", 1, 24)); // NOI18N
         welcome.setForeground(new java.awt.Color(0, 0, 255));
         welcome.setText("welcome");
 
+        friends.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         friends.setText("My Friends");
         friends.setToolTipText("see your current friends, and invite new ones!");
         friends.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -69,6 +89,7 @@ public class userGui extends javax.swing.JFrame {
             }
         });
 
+        codes.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         codes.setText("My Codes");
         codes.setToolTipText("see what your friends think of your published codes, and comment codes of others!");
         codes.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -77,8 +98,14 @@ public class userGui extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("My invitations");
         jLabel3.setToolTipText("see who invited you to be his/her friend!");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel3MousePressed(evt);
+            }
+        });
 
         dateText.setEditable(false);
         dateText.setBackground(new java.awt.Color(204, 204, 255));
@@ -86,24 +113,37 @@ public class userGui extends javax.swing.JFrame {
         dateText.setForeground(new java.awt.Color(51, 51, 255));
         dateText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL))));
 
+        logOutButton.setText("Log Out");
+        logOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOutButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 86, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(friends, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(codes, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(friends, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(codes, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,7 +159,9 @@ public class userGui extends javax.swing.JFrame {
                 .addComponent(codes, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 107, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(logOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -137,9 +179,24 @@ public class userGui extends javax.swing.JFrame {
     }//GEN-LAST:event_friendsMouseClicked
 
     private void codesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codesMouseClicked
-Codes codes2 = new Codes(user.getId(), true);
+Codes codes2 = new Codes(user.getId(), user.getId(), true, false);
 codes2.setVisible(true);
     }//GEN-LAST:event_codesMouseClicked
+
+    private void jLabel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MousePressed
+       try {
+        Invitations invit = new Invitations(user);
+        invit.setVisible(true);
+       }
+       catch (Exception e) {
+           JOptionPane.showMessageDialog(null, e.getMessage());
+       }
+    }//GEN-LAST:event_jLabel3MousePressed
+
+    private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
+login.dataBase.notifyOnline(user.getId(), false);
+        this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_logOutButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,6 +208,7 @@ codes2.setVisible(true);
     private javax.swing.JFormattedTextField dateText;
     private javax.swing.JLabel friends;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton logOutButton;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables

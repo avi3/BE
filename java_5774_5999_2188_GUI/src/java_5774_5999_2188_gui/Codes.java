@@ -8,6 +8,7 @@ package java_5774_5999_2188_gui;
 
 import Text.Code;
 import java.util.List;
+import javax.swing.JOptionPane;
 import person.User;
 
 /**
@@ -16,21 +17,42 @@ import person.User;
  */
 public class Codes extends javax.swing.JFrame {
 User user;
+int authorId;
 boolean owner;
+boolean friend;
+List<Code> codes;
+public void updateTable() {
+    try {
+    if (owner) {
+     codes = login.dataBase.GetAllUserCodes(authorId);
+    } else
+        codes = login.dataBase.GetUserCodes(authorId, friend);
+    CodesModel model = new CodesModel(codes);
+    codesTable.setModel(model);
+    codesTable.getSelectionModel().setSelectionInterval(-1, -1);
+    }
+    catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage());
+    }
+}
+
+
     /**
      * Creates new form Codes
      */
-    public Codes(int userId, boolean owner) {
+    public Codes(int authorId, int viewerId, boolean owner, boolean friend) {
         initComponents();
         try {
-        user = login.dataBase.GetUser(userId);
+            this.authorId = authorId;
+        user = login.dataBase.GetUser(viewerId);
         this.owner = owner;
             create.setVisible(owner);
-        name.setText(user.getUsername());
-        List<Code> codes = login.dataBase.GetAllUserCodes(user.getId());
-        CodesModel model = new CodesModel(codes);
-        codesTable.setModel(model);
-        codesTable.getSelectionModel().setSelectionInterval(0, 0);
+            create.setEnabled(owner);
+            removeButton.setVisible(owner);
+            removeButton.setEnabled(owner);
+            this.friend = friend;
+        name.setText(login.dataBase.GetUser(authorId).getUsername());
+        updateTable();
     }
         catch (Exception e) {
             
@@ -45,17 +67,17 @@ boolean owner;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        logo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         codesTable = new javax.swing.JTable();
         showMessage = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
         watchCode = new javax.swing.JButton();
         create = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+        logo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        logo.setText("logo");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         codesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -70,8 +92,12 @@ boolean owner;
         ));
         jScrollPane1.setViewportView(codesTable);
 
+        showMessage.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        showMessage.setForeground(new java.awt.Color(51, 0, 255));
         showMessage.setText("Showing codes of ");
 
+        name.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        name.setForeground(new java.awt.Color(51, 0, 255));
         name.setText("jLabel1");
 
         watchCode.setText("Watch this code");
@@ -82,64 +108,129 @@ boolean owner;
         });
 
         create.setText("Create new code");
+        create.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createActionPerformed(evt);
+            }
+        });
+
+        removeButton.setText("Remove this code");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        logo.setBackground(new java.awt.Color(153, 153, 255));
+        logo.setFont(new java.awt.Font("Aharoni", 1, 48)); // NOI18N
+        logo.setForeground(new java.awt.Color(255, 255, 255));
+        logo.setText("Filesbook");
+        logo.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(156, 156, 156)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(watchCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(create, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(showMessage)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(watchCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(create, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                    .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(backButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(showMessage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(showMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                    .addComponent(name))
+                    .addComponent(showMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(watchCode, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void watchCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_watchCodeActionPerformed
-        // TODO add your handling code here:
+    try {
+        if (codesTable.getSelectedRow() < 0) {
+            throw new Exception("no code selected");
+        }
+       // Code code = login.dataBase.GetAllUserCodes(user.getId()).get(codesTable.getSelectedRow());
+        Code code = codes.get(codesTable.getSelectedRow());
+        ShowCode show = new ShowCode(code, user, friend | owner);
+        show.setVisible(true);
+    }
+    catch (Exception e ) {
+        JOptionPane.showMessageDialog(null, e.getMessage());
+    }   
     }//GEN-LAST:event_watchCodeActionPerformed
+
+    private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+CreateCode create = new CreateCode(user, this);
+create.setVisible(true);// TODO add your handling code here:
+this.updateTable();
+    }//GEN-LAST:event_createActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+try {
+    if (codesTable.getSelectedRow() < 0)
+        throw new Exception("no code selected");
+    login.dataBase.RemoveCode(codes.get(codesTable.getSelectedRow()).getCodeId());
+    JOptionPane.showMessageDialog(null, "Code removed successfully");
+    this.updateTable();
+}
+catch (Exception e) {
+    JOptionPane.showMessageDialog(null, e.getMessage());
+}
+// TODO add your handling code here:
+    }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_backButtonActionPerformed
 
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JTable codesTable;
     private javax.swing.JButton create;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel name;
+    private javax.swing.JButton removeButton;
     private javax.swing.JLabel showMessage;
     private javax.swing.JButton watchCode;
     // End of variables declaration//GEN-END:variables

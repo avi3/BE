@@ -42,7 +42,7 @@ public class Code extends Text{
      * @param subject
      * @throws InstantiationException 
      */
-    public Code(User author, String text, ProgramLang lang, Permissions perm, String subject)  throws InstantiationException{
+    public Code(User author, String text, ProgramLang lang, Permissions perm, String subject)  throws Exception{
         super(author, text);
         this.lang = lang;
         this.subject = subject;
@@ -96,9 +96,9 @@ public class Code extends Text{
     * function to add comment
     * @param newComment 
     */
-    public void addComment(Comment newComment) {
-        if (newComment.getCommentedLineNumber() >= lines.size())
-            throw new IllegalArgumentException("commented line out of range");
+    public void addComment(Comment newComment) throws Exception {
+        if (newComment.getCommentedLineNumber() > lines.size())
+            throw new Exception("commented line out of range");
         comments.add(newComment);
         Collections.sort(comments);
     }

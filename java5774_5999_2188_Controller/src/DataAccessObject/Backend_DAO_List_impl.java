@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import Interface.Backend;
 import java.util.Date;
+import java.util.Iterator;
+
 
 /**
  *simple implementation data
@@ -64,6 +66,7 @@ public class Backend_DAO_List_impl implements Backend{
             if (toAdd.getId() == tmp.getAuthor_id())
                 toAdd.addCode(tmp);
         }
+      
     }
     
     /**
@@ -194,17 +197,17 @@ public class Backend_DAO_List_impl implements Backend{
  * @param code 
  */
     @Override
-    public void updateCode(Code code) {
-        for (Code tmp : _Codes) {
-            if (tmp.getCodeId() == code.getCodeId()) {
-                /* update at owner */
-                for (User user : _Users) {
-                    if (user.getId() == code.getAuthor_id())
-                        user.updateCode(code);
-                }
-                tmp.update(code);
+    public void updateCode(Code code) throws Exception {
+     
+        
+            Code toUpdate = getCode(code.getCodeId());
+            
+            toUpdate.update(code);
+            for (User user : _Users) {
+                if (user.getId() == code.getAuthor_id())
+                    user.updateCode(code);
             }
-        }
+        
     }
 
     /**
@@ -234,6 +237,19 @@ public class Backend_DAO_List_impl implements Backend{
     public void invite(int inviterId, int invitedId) throws Exception {
         User inviter  = GetUser(inviterId);
         NotFriend invited = GetUser(invitedId);
+        for (Friend f : inviter.getFriends()) {
+            if (f.getId() == invitedId)
+                throw new Exception("You are already a friend of " + f.getUsername());
+        }
+        if (invitedId == inviterId)
+            throw new Exception("you can't invite yourself, ha?");
+        for (Invitation i : _Invitations) {
+            if (i.getInviter().getId() == inviterId && i.getNewFriend().getId() == invitedId )
+                throw new Exception("You already invited " + invited.getUsername());
+           if  (i.getInviter().getId() == invitedId && i.getNewFriend().getId() == inviterId)
+               throw new Exception(invited.getUsername() + " has already invited you! Approve his invitation to become friends");
+          
+        }
         
         invited.invite(inviter);
         _Invitations.add(new Invitation(inviter, invited));
@@ -298,8 +314,8 @@ public class Backend_DAO_List_impl implements Backend{
      * @param userId 
      */
     @Override
-    public void notifyOnline(int userId) {
-        GetUser(userId).setIsOnline(true);
+    public void notifyOnline(int userId, boolean isOnline) {
+        GetUser(userId).setIsOnline(isOnline);
     }
 
     /**
@@ -328,6 +344,7 @@ public class Backend_DAO_List_impl implements Backend{
         for (Invitation tmp : _Invitations) {
           if (tmp.getInviter().getId() == inviter && tmp.getNewFriend().getId() == invited) {
               _Invitations.remove(tmp);
+              return;
           }
       }
     }
@@ -371,14 +388,25 @@ public class Backend_DAO_List_impl implements Backend{
      * @throws Exception 
      */
     @Override
-    public void findApprovedFriends(int userId) throws Exception{
+    public List<Friend> findApprovedFriends(int userId) throws Exception{
         User toAdd = GetUser(userId);
-        for (Invitation invit : _Invitations) {
+        List<Friend> newFriends = new ArrayList<>();
+       /* for (Invitation invit : _Invitations) {
             if (invit.getInviter().getId() == userId && invit.isApproved()) {
                 toAdd.addFriend((invit.getApprovedFriend(toAdd)));
                 _Invitations.remove(invit);
             }
+        }*/
+        for (Iterator<Invitation> iter = _Invitations.listIterator(); iter.hasNext();) {
+            Invitation invit = iter.next();
+            if (invit.getInviter().getId() == userId && invit.isApproved()) {
+                toAdd.addFriend((invit.getApprovedFriend(toAdd)));
+                newFriends.add((invit.getApprovedFriend(toAdd)));
+
+                iter.remove();
+            }
         }
+        return newFriends;
     }
 
     @Override
@@ -409,5 +437,16 @@ public class Backend_DAO_List_impl implements Backend{
         
     }
     
-    
-}
+    @Override
+    public Code getCode(int codeId) throws Exception{
+        
+        for (Code c : _Codes) {
+            
+            if (codeId == c.getCodeId()) {
+                
+                return c;
+            }
+        }
+      throw new Exception("code not found");
+    }
+} 

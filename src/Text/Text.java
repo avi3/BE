@@ -32,24 +32,26 @@ public class Text {
   }
   
   /**
-   * funtion to parse line
+   * function to parse line
    * @param text 
    */
-  private void parse_lines(String text) {
+  private void parse_lines(String text) throws Exception {
       int endIndex = 1;
       int lineNumber = 0;
-      
-      while (endIndex > 0) {
+      while (endIndex >= 0) {
           String s = text;
           endIndex = text.indexOf("\n");
           if (endIndex > 0)
               s = text.substring(0, endIndex);
+          else if (endIndex == 0)
+              s = "";
+          
           Line tmp = new Line(s, lineNumber);
           
           lineNumber++;
-          text = text.substring(endIndex + 1, text.length() - 1);
+          text = text.substring(endIndex + 1, text.length());
           if  (!lines.add(tmp))
-              throw new ArrayStoreException();
+              throw new Exception("problem");
       }
   }
   /**
@@ -69,15 +71,17 @@ public class Text {
    * @param text
    * @throws InstantiationException 
    */
-  public Text(User author, String text) throws InstantiationException{
+  public Text(User author, String text) throws Exception{
       this.creationDate = new Date();
       this.author_id = author.getId();
+      
       this.lines = new ArrayList<Line>();
+      
       try {
           parse_lines(text);
       }
-       catch (ArrayStoreException e) {
-           throw new InstantiationException();
+       catch (Exception e) {
+           throw new Exception(e.getMessage());
        }
   }
  /**

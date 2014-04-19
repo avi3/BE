@@ -7,6 +7,13 @@
 package java_5774_5999_2188_gui;
 
 import Text.Code;
+import Text.Comment;
+import Text.Line;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import person.User;
 
 /**
  *
@@ -14,16 +21,69 @@ import Text.Code;
  */
 public class ShowCode extends javax.swing.JFrame {
 Code code;
-    /**
-     * Creates new form ShowCode
-     */
-    public ShowCode(Code code) {
-        initComponents();
-        this.code = code;
+User user;
+boolean isFriend;
+
+public String textComment(Comment comment, int lineLength) {
+    User author = login.dataBase.GetUser(comment.getAuthor_id());
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < lineLength; i++)
+        sb.append("-");
+    sb.append("\n");
+    sb.append("Comment by: " + author.getUsername() + " Date: " + comment.getCreationDate().toString() + "\n");
+    for (Line l : comment.getLines()) {
+        sb.append(l.getText());
+    }
+    for (int i = 0; i < lineLength; i++)
+        sb.append("-");
+    sb.append("\n");
+    return sb.toString();
+}
+public String textCode(Code code, int lineLength) {
+    StringBuilder sb = new  StringBuilder();
+    for (Line l : code.getLines()) {
+        sb.append(l.getLineNumber() + ": " + l.getText());
+        for (Comment c : code.getComments()) {
+            if (c.getCommentedLineNumber() == l.getLineNumber())
+                sb.append(textComment(c, lineLength));
+        }
+    }
+    return  sb.toString();
+}
+
+public void updateCode() {
+    try {
+        this.code = login.dataBase.getCode(code.getCodeId());
         owner.setText("Author: " + login.dataBase.GetUser(code.getAuthor_id()).getUsername());
         subject.setText("Subject: " + code.getSubject());
         lang.setText("Language: " + code.getLang().toString());
+        permLabel.setText("Permission: " + code.getPermission().toString());
         creationDate.setText("Creation Date: " + code.getCreationDate().toString());
+        codeText.setText(textCode(code, 50));
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, ex.getMessage());
+    }
+}
+    /**
+     * Creates new form ShowCode
+     */
+    public ShowCode(Code code, User user, boolean isFriend) {
+        initComponents();
+        try {
+        this.code = login.dataBase.getCode(code.getCodeId());
+        this.user = user;
+        this.isFriend = isFriend;
+        if (!this.isFriend)
+            codeText.setToolTipText("Get friends with " + login.dataBase.GetUser(code.getAuthor_id()).getUsername() + " to comment his codes");
+        else
+            codeText.setToolTipText("Click on a line to add comment");
+         
+       updateCode();
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "code not found");
+            this.dispose();
+        }
     }
 
     /**
@@ -35,31 +95,57 @@ Code code;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        logo = new javax.swing.JLabel();
         owner = new javax.swing.JLabel();
         subject = new javax.swing.JLabel();
         lang = new javax.swing.JLabel();
         creationDate = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         codeText = new javax.swing.JTextArea();
+        backbutton = new javax.swing.JButton();
+        permLabel = new javax.swing.JLabel();
+        logo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        logo.setText("logo");
-
+        owner.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         owner.setText("jLabel1");
 
+        subject.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         subject.setText("jLabel1");
 
+        lang.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lang.setText("jLabel1");
 
+        creationDate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         creationDate.setText("jLabel1");
 
+        codeText.setEditable(false);
         codeText.setColumns(20);
         codeText.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         codeText.setRows(5);
-        codeText.setText("fdfadfada");
+        codeText.setToolTipText("click on a line to add a comment");
+        codeText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                codeTextMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(codeText);
+
+        backbutton.setText("Back");
+        backbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backbuttonActionPerformed(evt);
+            }
+        });
+
+        permLabel.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        permLabel.setText("jLabel1");
+
+        logo.setBackground(new java.awt.Color(153, 153, 255));
+        logo.setFont(new java.awt.Font("Aharoni", 1, 48)); // NOI18N
+        logo.setForeground(new java.awt.Color(255, 255, 255));
+        logo.setText("Filesbook");
+        logo.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,17 +157,23 @@ Code code;
                     .addComponent(creationDate, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                     .addComponent(lang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(subject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(owner, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(owner, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(permLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
+                .addComponent(backbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(381, 381, 381))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 309, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(owner, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -90,57 +182,69 @@ Code code;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lang, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(creationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(creationDate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(permLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(backbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    public int getLengthUptoLine(Code code, int line) {
+        if (line <=0)
+            return 0;
+        int len = line;
+        for (Comment c : code.getComments()) {
+            if (c.getCommentedLineNumber() < line) {
+                len += c.getLines().size() + 3; //+2 for the seperators, +1 for details
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ShowCode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ShowCode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ShowCode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ShowCode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ShowCode().setVisible(true);
-            }
-        });
+        return len;
     }
+    
+    private void codeTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codeTextMouseClicked
+        try {
+            if (this.isFriend) {
+        JTextArea text = (JTextArea)evt.getSource();
+        int pos = text.getCaretPosition();
+        int clickedLine = text.getLineOfOffset(pos);
+        for (int i = 0; i < code.getLines().size(); i++) {
+            if (getLengthUptoLine(code, i) == clickedLine) {
+                AddComment comment = new AddComment(user, code, i, this);
+        comment.setVisible(true);
+        break;
+            }
+            }
+        }
+        
+        
+       }
+       catch (Exception e) {
+           JOptionPane.showMessageDialog(null, e.getMessage());
+       }
+    }//GEN-LAST:event_codeTextMouseClicked
+
+    private void backbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbuttonActionPerformed
+this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_backbuttonActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backbutton;
     private javax.swing.JTextArea codeText;
     private javax.swing.JLabel creationDate;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lang;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel owner;
+    private javax.swing.JLabel permLabel;
     private javax.swing.JLabel subject;
     // End of variables declaration//GEN-END:variables
 }

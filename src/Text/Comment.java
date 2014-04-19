@@ -28,7 +28,8 @@ public class Comment extends Text implements Comparable<Comment>{
      * @param lineNumber
      * @throws InstantiationException 
      */
-    public Comment(User author, String text, Text commented, int lineNumber) throws InstantiationException{
+    public Comment(User author, String text, Text commented, int lineNumber) throws Exception{
+        
         super(author, text);
         commentedText = commented;
         commentedLineNumber = lineNumber;

@@ -42,7 +42,7 @@ public class User implements Friend, NotFriend {
      * @throws InstantiationException 
      */
     @Override
-    public void addComment(User commentator, Code code, int lineNumber, String commentText) throws InstantiationException 
+    public void addComment(User commentator, Code code, int lineNumber, String commentText) throws Exception 
      {
         boolean hisCode = false;
         
@@ -81,7 +81,7 @@ public class User implements Friend, NotFriend {
     @Override
     public void invite(User inviter) {
         for (Invitation invit : pendingInvitations) {
-            if (invit.getInviter() == (NotFriend)this)
+            if (invit.getInviter().getId() == inviter.getId())
                 throw new IllegalArgumentException("friend was already invited");
         }
         addPendingInvitation(new Invitation(inviter, this));
@@ -200,6 +200,7 @@ public class User implements Friend, NotFriend {
         for (Code tmp : codes) {
             if (tmp.getCodeId() == code.getCodeId())
                 tmp.update(code);
+            return;
         }
         throw new IllegalArgumentException("code not found");
     }

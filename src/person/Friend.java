@@ -27,7 +27,7 @@ public interface Friend {
      * @param commentText
      * @throws InstantiationException 
      */
-    public abstract void addComment(User commentator, Code code, int lineNumber, String commentText) throws InstantiationException ;
+    public abstract void addComment(User commentator, Code code, int lineNumber, String commentText) throws Exception ;
     
      /**
      * @return the id

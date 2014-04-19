@@ -7,9 +7,11 @@
 package java_5774_5999_2188_gui;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import person.Friend;
+import person.NotFriend;
 import person.User;
 
 /**
@@ -19,7 +21,8 @@ import person.User;
 public class friends extends javax.swing.JFrame {
 
     User user;
-    
+    List<Friend> friends;
+    List<NotFriend> users;
     int showing; //0 is all users, 1 is friends only
     /**
      * Creates new form friends
@@ -28,18 +31,45 @@ public class friends extends javax.swing.JFrame {
         initComponents();
         try {
             user = me;
-        List<Friend> friends = login.dataBase.GetUserFriends(user.getId());
-        FriendsModel model = new FriendsModel(friends);
-        friendsTable.setModel(model);
-        showingInfo.setText("Showing only your friends.");
-        showing = 1;
-        invite.setVisible(false);
+       showing = 1;
+       updateTable();
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
+    
+    public void updateTable() {
+        List<Friend> tmp = new ArrayList<>();
+        List<NotFriend> tmp2 = new ArrayList<>();
+        if (showing == 1) {
+            for (Friend f : login.dataBase.GetUserFriends(user.getId())) {
+                if (f.getId() != user.getId())
+                    tmp.add(f);
+            }
+            friends = tmp;
+        FriendsModel model = new FriendsModel(friends);
+        friendsTable.setModel(model);
+        showingInfo.setText("Showing only your friends.");
+        invite.setVisible(false);
+        invite.setEnabled(false);
+        }
+        else {
+            for (NotFriend f : login.dataBase.getAllAsNotFriend()) {
+                if (f.getId() != user.getId())
+                    tmp2.add(f);
+            }
+            users = tmp2;
+          NotFriendModel model = new NotFriendModel(users, user);
+        friendsTable.setModel(model);
+        
+        showingInfo.setText("Showing all users.");
+        invite.setVisible(true);
+        invite.setEnabled(true);
+        }
+  friendsTable.getSelectionModel().setSelectionInterval(-1, -1);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,17 +79,17 @@ public class friends extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        logo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         friendsTable = new javax.swing.JTable();
         showFriends = new javax.swing.JButton();
         showAll = new javax.swing.JButton();
         showingInfo = new javax.swing.JLabel();
         invite = new javax.swing.JButton();
+        showCodes = new javax.swing.JButton();
+        backbutton = new javax.swing.JButton();
+        logo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        logo.setText("logo");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         friendsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -80,8 +110,10 @@ public class friends extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        friendsTable.setToolTipText("Click on a user to see his codes");
         jScrollPane1.setViewportView(friendsTable);
 
+        showFriends.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         showFriends.setText("My Friends");
         showFriends.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,6 +121,7 @@ public class friends extends javax.swing.JFrame {
             }
         });
 
+        showAll.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         showAll.setText("Show all Users");
         showAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,8 +129,10 @@ public class friends extends javax.swing.JFrame {
             }
         });
 
+        showingInfo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         showingInfo.setText("jLabel1");
 
+        invite.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         invite.setText("Invite this user to be your friend!");
         invite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,24 +140,50 @@ public class friends extends javax.swing.JFrame {
             }
         });
 
+        showCodes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        showCodes.setText("Show user codes");
+        showCodes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showCodesActionPerformed(evt);
+            }
+        });
+
+        backbutton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        backbutton.setText("Back");
+        backbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backbuttonActionPerformed(evt);
+            }
+        });
+
+        logo.setBackground(new java.awt.Color(153, 153, 255));
+        logo.setFont(new java.awt.Font("Aharoni", 1, 48)); // NOI18N
+        logo.setForeground(new java.awt.Color(255, 255, 255));
+        logo.setText("Filesbook");
+        logo.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(showingInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(84, 84, 84)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(showFriends, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(showAll, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(invite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))))
-                .addGap(0, 72, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(backbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(invite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(showFriends, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(showAll, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                                .addComponent(showCodes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(showingInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 64, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,9 +198,13 @@ public class friends extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(showAll, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(invite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(showCodes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(170, 170, 170))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(invite, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55)
+                .addComponent(backbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -147,12 +212,9 @@ public class friends extends javax.swing.JFrame {
 
     private void showFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFriendsActionPerformed
        try {
-        List<Friend> friends = login.dataBase.GetUserFriends(user.getId());
-        FriendsModel model = new FriendsModel(friends);
-        friendsTable.setModel(model);
-        showingInfo.setText("Showing only your friends.");
+       
         showing = 1;
-        invite.setVisible(false);
+        updateTable();
        }
        catch (Exception e) {
            JOptionPane.showMessageDialog(null, e.getMessage());
@@ -161,13 +223,8 @@ public class friends extends javax.swing.JFrame {
 
     private void showAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAllActionPerformed
       try {
-          List<User> users = login.dataBase.GetAllUsers();
-          FriendsModel model = new FriendsModel(users, true);
-        friendsTable.setModel(model);
-        friendsTable.getSelectionModel().setSelectionInterval(0, 0);
-        showingInfo.setText("Showing all users.");
-        showing = 0;
-        invite.setVisible(true);
+         showing = 0;
+        updateTable();
       }
       catch (Exception e) {
           
@@ -177,21 +234,69 @@ public class friends extends javax.swing.JFrame {
 
     private void inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteActionPerformed
         try {
-            login.dataBase.invite(user.getId(),login.dataBase.GetUser(friendsTable.getSelectedRow()).getId());
+            if (friendsTable.getSelectedRow() < 0)
+                throw new Exception("no user selected");
+            int invitedId;
+            String name;
+            /*if (showing == 1) {
+                invitedId = friends.get(friendsTable.getSelectedRow()).getId();
+                name = friends.get(friendsTable.getSelectedRow()).getUsername();
+            }
+            else {*/
+                invitedId = users.get(friendsTable.getSelectedRow()).getId();
+                name = users.get(friendsTable.getSelectedRow()).getUsername();
+            //}
+            login.dataBase.invite(user.getId(), invitedId);
+            JOptionPane.showMessageDialog(null, "invitation to " + name + " was sent!");
+            updateTable();
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_inviteActionPerformed
 
+    private void showCodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCodesActionPerformed
+         try {
+            if (friendsTable.getSelectedRow() < 0)
+                throw new Exception("no user selected");
+            boolean showIsFriend;
+            int id;
+            if (showing == 1) {
+                showIsFriend = true;
+                id = friends.get(friendsTable.getSelectedRow()).getId();
+            }
+            else {
+                showIsFriend = false;
+                id = users.get(friendsTable.getSelectedRow()).getId();
+                for (Friend f : user.getFriends()) {
+                    if (f.getId() == id)
+                        showIsFriend = true;
+                }
+                
+                
+            }
+                 Codes show = new Codes(id, user.getId(), false, showIsFriend);
+                show.setVisible(true);
+            }
+catch (Exception e) {
+    JOptionPane.showMessageDialog(null, e.getMessage());
+}
+    }//GEN-LAST:event_showCodesActionPerformed
+
+    private void backbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbuttonActionPerformed
+        this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_backbuttonActionPerformed
+    
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backbutton;
     private javax.swing.JTable friendsTable;
     private javax.swing.JButton invite;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel logo;
     private javax.swing.JButton showAll;
+    private javax.swing.JButton showCodes;
     private javax.swing.JButton showFriends;
     private javax.swing.JLabel showingInfo;
     // End of variables declaration//GEN-END:variables

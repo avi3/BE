@@ -68,7 +68,7 @@ public class Line implements Comparable<Line>{
      * @return the text
      */
     public String getText() {
-        return text;
+        return text + "\n";
     }
 
     /**

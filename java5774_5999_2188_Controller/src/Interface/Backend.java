@@ -92,7 +92,7 @@ public interface Backend {
  * function to update code
  * @param code 
  */
-    public abstract void updateCode(Code code);
+    public abstract void updateCode(Code code) throws Exception;
     
     /**
      * @return all codes()
@@ -151,15 +151,16 @@ public interface Backend {
     /**
      * function to find approved friend
      * @param userId
+     * @return 
      * @throws Exception 
      */
-    public abstract void findApprovedFriends(int userId) throws Exception;
+    public abstract List<Friend> findApprovedFriends(int userId) throws Exception;
     
     /**
      * function to notify online
      * @param userId 
      */
-    public abstract void notifyOnline(int userId);
+    public abstract void notifyOnline(int userId, boolean isOnline);
     
     /**
      * function to approve invitation
@@ -197,4 +198,6 @@ public interface Backend {
     public abstract List<Invitation> GetInvitationsAfter(Date date);
     
     public abstract List<Code> GetCodesAfter(Date date);
+    
+    public abstract Code getCode(int codeId) throws Exception; 
 }

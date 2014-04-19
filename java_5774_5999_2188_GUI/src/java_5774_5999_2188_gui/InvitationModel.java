@@ -7,60 +7,51 @@
 package java_5774_5999_2188_gui;
 
 import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
-import person.Friend;
-import person.User;
+import person.Invitation;
 
 /**
  *
  * @author חיים
  */
-public class FriendsModel extends AbstractTableModel {
+public class InvitationModel extends AbstractTableModel  {
 
-    
-    List<Friend> friends;
-    String titles[] = new String[] {"Name", "Email", "# of codes", "ONLINE"};
+    List<Invitation> invits;
+    String titles[] = new String[] {"Inviter Name", "Invited Name", "Date invited"};
 
-    public FriendsModel(List<Friend> friends) {
-        this.friends = friends;
-        
+    public InvitationModel(List<Invitation> invits) {
+        this.invits = invits;
     }
     
-   
     
     @Override
     public int getRowCount() {
-        
-        return friends.size();
-        
+        return invits.size();
     }
 
     @Override
     public int getColumnCount() {
-       return 4;
+        return 3;
     }
 
     @Override
     public Object getValueAt(int row, int column) {
-        Friend friend = friends.get(row);
+        Invitation invit = invits.get(row);
         
         switch (column) {
             case 0:
-                return friend.getUsername();
+                return invit.getInviter().getUsername();
             case 1:
-                return friend.getEmailAddress();
+                return invit.getNewFriend().getUsername();
             case 2:
-                return friend.getFriendCodes().size();
-            case 3:
-                return friend.isOnline();
-                
+                return invit.getInvitationDate().toString();
         }
         return null;
     }
     
+    @Override
     public String getColumnName(int col) {
         return titles[col];
     }
+    
 }
-
