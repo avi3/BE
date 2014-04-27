@@ -376,8 +376,8 @@ public class User implements Friend, NotFriend {
     
         for (Code c : codes) {
             if (c.getPermission() == Permissions.ALL ||
-                    c.getPermission() == Permissions.FRIENDS ||
-                    c.getPermission() == Permissions.REQUEST)
+                    c.getPermission() == Permissions.FRIENDS
+                    /* || c.getPermission() == Permissions.REQUEST*/)
                 toFriend.add(c);
         }
         return toFriend;

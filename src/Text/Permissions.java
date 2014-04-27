@@ -11,5 +11,5 @@ package Text;
  * @author חיים
  */
 public enum Permissions {
-    ALL, REQUEST, FRIENDS, PRIVATE,
+    ALL, /*REQUEST,*/ FRIENDS, PRIVATE,
 }
