@@ -7,6 +7,7 @@
 package java_5774_5999_2188_gui;
 
 import Text.Code;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import person.User;
@@ -21,15 +22,37 @@ int authorId;
 boolean owner;
 boolean friend;
 List<Code> codes;
+List<Code> tmpcodes;
+List<Code> tmpcodes1;
+
+
 public void updateTable() {
     try {
     if (owner) {
      codes = login.dataBase.GetAllUserCodes(authorId);
-    } else
-        codes = login.dataBase.GetUserCodes(authorId, friend);
+    } else{
+        codes=new ArrayList<>();
+        tmpcodes = login.dataBase.GetAllUserCodes(authorId);
+        tmpcodes1 = login.dataBase.GetUserCodes(authorId, friend);
+        for (Code toAdd : tmpcodes) {
+            for (Code toAdd1 : tmpcodes1)
+              if (toAdd.getCodeId() == toAdd1.getCodeId())
+                   codes.add(toAdd);
+        }
+    }
     CodesModel model = new CodesModel(codes);
     codesTable.setModel(model);
     codesTable.getSelectionModel().setSelectionInterval(-1, -1);
+    
+    if (codesTable.getRowCount()==0) {
+        watchCode.setEnabled(false);
+        removeButton.setEnabled(false);
+    }
+    else 
+    {
+        watchCode.setEnabled(true); 
+        removeButton.setEnabled(owner);
+    }
     }
     catch (Exception e) {
         JOptionPane.showMessageDialog(null, e.getMessage());
@@ -183,7 +206,8 @@ public void updateTable() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void watchCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_watchCodeActionPerformed
-    try {
+    /*
+       try {
         if (codesTable.getSelectedRow() < 0) {
             throw new Exception("no code selected");
         }
@@ -194,7 +218,28 @@ public void updateTable() {
     }
     catch (Exception e ) {
         JOptionPane.showMessageDialog(null, e.getMessage());
-    }   
+    } 
+       */
+        try {
+       
+        if ((codesTable.getSelectedRow() < 0)&&(codesTable.getRowCount()!=1)) {
+            throw new Exception("no code selected");
+        }
+       // Code code = login.dataBase.GetAllUserCodes(user.getId()).get(codesTable.getSelectedRow());
+        Code code ; 
+        if (codesTable.getRowCount()==1) 
+            code=codes.get(0);
+        else
+            code=codes.get(codesTable.getSelectedRow());
+
+        ShowCode show = new ShowCode(code, user, friend | owner);
+        show.setVisible(true);
+    }
+        catch (Exception e ) {
+        JOptionPane.showMessageDialog(null, e.getMessage());
+    } 
+        
+        
     }//GEN-LAST:event_watchCodeActionPerformed
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
@@ -204,7 +249,8 @@ this.updateTable();
     }//GEN-LAST:event_createActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-try {
+/*
+        try {
     if (codesTable.getSelectedRow() < 0)
         throw new Exception("no code selected");
     login.dataBase.RemoveCode(codes.get(codesTable.getSelectedRow()).getCodeId());
@@ -215,6 +261,24 @@ catch (Exception e) {
     JOptionPane.showMessageDialog(null, e.getMessage());
 }
 // TODO add your handling code here:
+*/
+        
+try {
+    if ((codesTable.getSelectedRow() < 0)&&(codesTable.getRowCount()!=1))
+        throw new Exception("no code selected");
+    if (codesTable.getRowCount()==1)
+        login.dataBase.RemoveCode(codes.get(0).getCodeId());
+    else
+         login.dataBase.RemoveCode(codes.get(codesTable.getSelectedRow()).getCodeId());
+    JOptionPane.showMessageDialog(null, "Code removed successfully");
+    this.updateTable();
+}
+catch (Exception e) {
+    JOptionPane.showMessageDialog(null, e.getMessage());
+}
+// TODO add your handling code here:
+
+
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed

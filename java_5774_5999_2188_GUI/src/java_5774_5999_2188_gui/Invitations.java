@@ -30,8 +30,11 @@ List<Invitation> outgoing;
         
         this.pendings = getPendings();
         this.outgoing = getOutgoings();
-            updateTable(outgoing, outgoingTable);
+        
+             updateTable(outgoing, outgoingTable);
             updateTable(pendings, pendingTable);
+            
+           
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -159,15 +162,16 @@ public List<Invitation> getPendings() throws Exception{
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(153, 153, Short.MAX_VALUE)
+                        .addComponent(approveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(165, 165, 165))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addComponent(pendingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(173, 345, Short.MAX_VALUE)
-                        .addComponent(approveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(outGoingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -180,10 +184,26 @@ public List<Invitation> getPendings() throws Exception{
     }// </editor-fold>//GEN-END:initComponents
 
     private void approveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveButtonActionPerformed
-try {
+/*try {
             if (pendingTable.getSelectedRow() < 0)
                 throw new Exception("Please select invitaion to approve");
             int friendId = pendings.get(pendingTable.getSelectedRow()).getInviter().getId();
+            login.dataBase.approveInvitation(user.getId(), friendId);
+            JOptionPane.showMessageDialog(null, "you are now friends with " + login.dataBase.GetUser(friendId).getUsername() + "!");
+           pendings = getPendings();
+            updateTable(pendings, pendingTable);
+}
+catch (Exception e) {
+    JOptionPane.showMessageDialog(null, e.getMessage());
+}*/
+        try {
+            if ((pendingTable.getSelectedRow() < 0)&&(pendings.size()!=1))
+                throw new Exception("Please select invitaion to approve");
+            int friendId;
+            if (pendings.size()==1)
+                friendId = pendings.get(0).getInviter().getId();
+            else
+                friendId = pendings.get(pendingTable.getSelectedRow()).getInviter().getId();
             login.dataBase.approveInvitation(user.getId(), friendId);
             JOptionPane.showMessageDialog(null, "you are now friends with " + login.dataBase.GetUser(friendId).getUsername() + "!");
            pendings = getPendings();
@@ -202,7 +222,18 @@ this.dispose();        // TODO add your handling code here:
        InvitationModel model = new InvitationModel(invits);
        table.setModel(model);
        table.getSelectionModel().setSelectionInterval(-1, -1);
+       if (invits.isEmpty()) 
+           approveButton.setEnabled(false);
+       else{
+           approveButton.setEnabled(true);
+           if (invits.size()==1) 
+               approveButton.setText("Approve");
+           else
+               approveButton.setText("Approve selected");
+       }
        
+       
+           
    }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

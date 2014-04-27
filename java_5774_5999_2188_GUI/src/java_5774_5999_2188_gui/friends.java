@@ -54,6 +54,24 @@ public class friends extends javax.swing.JFrame {
         showingInfo.setText("Showing only your friends.");
         invite.setVisible(false);
         invite.setEnabled(false);
+        showCodes.setVisible(true);
+        
+        boolean flagCodes=false;
+        for (int i = 0; i < model.getRowCount(); i++) {
+               if (!"0".equals(model.getValueAt(i,2).toString())) 
+                    flagCodes=true;    
+            }       
+
+        
+        if (friends.isEmpty())
+        {
+           showCodes.setEnabled(false);
+        }
+        else
+        {
+           showCodes.setEnabled(flagCodes);
+        }    
+        
         }
         else {
             for (NotFriend f : login.dataBase.getAllAsNotFriend()) {
@@ -61,14 +79,34 @@ public class friends extends javax.swing.JFrame {
                     tmp2.add(f);
             }
             users = tmp2;
+                                   
           NotFriendModel model = new NotFriendModel(users, user);
         friendsTable.setModel(model);
         
         showingInfo.setText("Showing all users.");
+        
+        boolean flagInvite=false;
+        boolean flagCodes=false;
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (model.getValueAt(i, 2)=="Not Friend") 
+                    flagInvite=true;   
+                if (!"0".equals(model.getValueAt(i, 1).toString())) 
+                    flagCodes=true;    
+            }
         invite.setVisible(true);
-        invite.setEnabled(true);
+        invite.setEnabled(flagInvite);
+        
+        
+        showCodes.setEnabled(flagCodes);
+        showCodes.setVisible(true);
+            
         }
-  friendsTable.getSelectionModel().setSelectionInterval(-1, -1);
+        if (friendsTable.getRowCount()==1)
+            friendsTable.getSelectionModel().setSelectionInterval(0,0);
+        else
+             friendsTable.getSelectionModel().setSelectionInterval(-1, -1);
+
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -275,7 +313,10 @@ public class friends extends javax.swing.JFrame {
                 
                 
             }
+               
                  Codes show = new Codes(id, user.getId(), false, showIsFriend);
+                 if (show.codes.isEmpty()) 
+                     throw new Exception("not exist codes of this user");
                 show.setVisible(true);
             }
 catch (Exception e) {

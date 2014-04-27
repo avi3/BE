@@ -168,9 +168,20 @@ public class userGui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void friendsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_friendsMouseClicked
-       try {
+       /*try {
            JFrame friends = new friends(user);
            friends.setVisible(true);
+       }
+       catch (Exception e) {
+           JOptionPane.showMessageDialog(null, "Error opening friends list");
+       }*/
+        try {
+            if (login.dataBase.getAllAsNotFriend().size()!=1){
+                JFrame friends = new friends(user);
+                friends.setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Users no exist except you");
        }
        catch (Exception e) {
            JOptionPane.showMessageDialog(null, "Error opening friends list");
@@ -183,9 +194,14 @@ Codes codes2 = new Codes(user.getId(), user.getId(), true, false);
 codes2.setVisible(true);
     }//GEN-LAST:event_codesMouseClicked
 
+    
+    
     private void jLabel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MousePressed
-       try {
+
+        try {
         Invitations invit = new Invitations(user);
+        if (invit.outgoing.isEmpty()&&invit.pendings.isEmpty())
+            throw new Exception("Don't exist Invitations");
         invit.setVisible(true);
        }
        catch (Exception e) {
